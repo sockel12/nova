@@ -41,6 +41,10 @@ file(GLOB_RECURSE SRC_FILES src/*.cpp)
 
 add_library(nova STATIC ${SRC_FILES})
 
+target_compile_definitions(nova PUBLIC
+    GLFW_INCLUDE_NONE
+)
+
 target_include_directories(nova
   PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

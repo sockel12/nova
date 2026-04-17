@@ -19,3 +19,4 @@ SpaceAfterCStyleCast: true
 SpaceAfterTemplateKeyword: true
 SpaceBeforeAssignmentOperators: true
 AccessModifierOffset: -2
+SortIncludes: false
