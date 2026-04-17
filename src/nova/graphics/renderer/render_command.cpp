@@ -5,6 +5,8 @@
 namespace nova::graphics::renderer
 {
 
+std::shared_ptr<RendererAPI> RenderCommand::s_renderer_api = nullptr;
+
 void RenderCommand::init(graphics::GraphicsAPI api)
 {
   s_renderer_api = RendererAPI::create(api);

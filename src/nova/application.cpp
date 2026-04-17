@@ -1,10 +1,15 @@
 #include <nova/application.h>
 
-#include <nova/graphics/graphics_context.h>
-#include <memory>
+#include <nova/graphics/renderer/render_command.h>
+
+#include <nova/graphics/buffers/vertex_buffer.h>
+#include <nova/graphics/buffers/vertex_array_object.h>
 
 namespace nova
 {
+
+namespace ngr = nova::graphics::renderer;
+namespace nvb = nova::graphics::buffers;
 
 Application::Application(ApplicationSpecification spec)
     : m_spec(spec), m_window(nullptr), m_context(nullptr)
@@ -37,11 +42,15 @@ bool Application::init()
     return false;
   }
 
+  ngr::RenderCommand::init(graphics::GraphicsAPI::OPENGL);
+
   return true;
 }
 
 void Application::shutdown()
 {
+  ngr::RenderCommand::shutdown();
+
   if (m_context)
   {
     m_context->shutdown();
@@ -59,8 +68,32 @@ void Application::run()
 {
   bool should_close = false;
 
+  float vertices[12] = {
+      -0.5f, -0.5f, 0.0f,  // bottom left
+      0.5f,  -0.5f, 0.0f,  // bottom right
+      0.0f,  0.5f,  0.0f   // top center
+  };
+
+  nvb::VertexBufferLayout layout;
+  layout.emplace_back("a_position", graphics::buffers::ShaderDataType::FLOAT3, false);
+
+  auto vertex_buffer = nvb::VertexBuffer::create(m_context->api());
+  vertex_buffer->data(vertices, sizeof(vertices));
+  vertex_buffer->buffer_layout(layout);
+
+  auto vertex_array_object = nvb::VertexArrayObject::create(m_context->api());
+  vertex_array_object->add_vertex_buffer(vertex_buffer);
+
+  ngr::RenderCommand::set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
+
   while (!glfwWindowShouldClose(m_window->native_window()))
   {
+    ngr::RenderCommand::clear();
+
+    vertex_array_object->bind();
+    ngr::RenderCommand::draw_arrays(ngr::PrimitiveType::TRIANGLES, 3);
+    vertex_array_object->unbind();
+
     m_window->poll_events();
 
     m_context->swap_buffers();

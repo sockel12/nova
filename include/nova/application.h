@@ -1,8 +1,11 @@
 #pragma once
 
-#include <nova/graphics/graphics_context.h>
+#include <memory>
+
 #include <nova/core/logger.h>
 #include <nova/core/window.h>
+
+#include <nova/graphics/graphics_context.h>
 
 namespace nova
 {
