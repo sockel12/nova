@@ -1,13 +1,12 @@
 #pragma once
 
-#include "nova/core/window.h"
-namespace nova::core
-{
+#include <memory>
 
-enum class GraphicsAPI
+#include <nova/core/window.h>
+#include <nova/graphics/graphics_api.h>
+
+namespace nova::graphics
 {
-  OPENGL
-};
 
 struct ContextSpecification
 {
@@ -19,7 +18,7 @@ struct ContextSpecification
 class GraphicsContext
 {
 public:
-  GraphicsContext(const std::shared_ptr<Window>& window, ContextSpecification spec)
+  GraphicsContext(const std::shared_ptr<core::Window>& window, ContextSpecification spec)
       : m_window(window), m_spec(spec)
   {
   }
@@ -37,9 +36,13 @@ public:
 
   virtual GraphicsAPI api() const = 0;
 
+  static std::shared_ptr<GraphicsContext> create(
+      const std::shared_ptr<core::Window>& window,
+      ContextSpecification spec = ContextSpecification());
+
 protected:
-  std::shared_ptr<Window> m_window;
+  std::shared_ptr<core::Window> m_window;
   ContextSpecification m_spec;
 };
 
-}  // namespace nova::core
+}  // namespace nova::graphics

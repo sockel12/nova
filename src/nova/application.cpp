@@ -1,6 +1,6 @@
 #include <nova/application.h>
 
-#include <nova/core/graphics_factory.h>
+#include <nova/graphics/graphics_context.h>
 #include <memory>
 
 namespace nova
@@ -22,8 +22,7 @@ bool Application::init()
   }
 
   m_window = std::make_shared<core::Window>(m_spec.width, m_spec.height, m_spec.name);
-  m_context =
-      core::GraphicsFactory::create_graphics_context(m_window, core::ContextSpecification());
+  m_context = graphics::GraphicsContext::create(m_window, graphics::ContextSpecification());
 
   m_context->setup_window_hints();
   if (!m_window->init())

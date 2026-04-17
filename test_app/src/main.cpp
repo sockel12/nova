@@ -1,5 +1,5 @@
 #include <nova/nova.h>
-#include "nova/application.h"
+#include <nova/application.h>
 
 int main()
 {

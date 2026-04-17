@@ -1,10 +1,10 @@
-#include <nova/opengl/gl_context.h>
+#include <nova/graphics/opengl/gl_context.h>
 
 #include "GLFW/glfw3.h"
 #include "glad/gl.h"
-#include "nova/core/graphics_context.h"
+#include <nova/graphics/graphics_context.h>
 
-namespace nova::opengl
+namespace nova::graphics::opengl
 {
 
 void APIENTRY opengl_debug_callback(GLenum source, GLenum type, GLuint id, GLenum severity,
@@ -31,8 +31,8 @@ void APIENTRY opengl_debug_callback(GLenum source, GLenum type, GLuint id, GLenu
 }
 
 OpenGLContext::OpenGLContext(const std::shared_ptr<core::Window>& window,
-                             core::ContextSpecification spec)
-    : core::GraphicsContext(window, spec)
+                             graphics::ContextSpecification spec)
+    : graphics::GraphicsContext(window, spec)
 {
 }
 
@@ -80,4 +80,4 @@ void OpenGLContext::swap_buffers() { glfwSwapBuffers(m_window->native_window());
 
 void OpenGLContext::vsync(bool enabled) { m_spec.vsync = enabled; }
 
-}  // namespace nova::opengl
+}  // namespace nova::graphics::opengl

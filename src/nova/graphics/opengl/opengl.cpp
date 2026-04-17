@@ -1,8 +1,8 @@
-#include <nova/opengl/opengl.h>
+#include <nova/graphics/opengl/opengl.h>
 
 #include <memory>
 
-namespace nova::opengl
+namespace nova::graphics::opengl
 {
 
 std::shared_ptr<spdlog::logger> logger()
@@ -11,4 +11,4 @@ std::shared_ptr<spdlog::logger> logger()
   return logger;
 }
 
-}  // namespace nova::opengl
+}  // namespace nova::graphics::opengl

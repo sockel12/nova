@@ -37,7 +37,7 @@ FetchContent_MakeAvailable(glfw)
 
 add_subdirectory(deps/glad)
 
-file(GLOB_RECURSE SRC_FILES src/*.cpp)
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
 
 add_library(nova STATIC ${SRC_FILES})
 
@@ -58,4 +58,4 @@ target_link_libraries(nova
   glad
 )
 
-add_subdirectory(test)
+add_subdirectory(test_app)

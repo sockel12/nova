@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nova/core/graphics_context.h>
+#include <nova/graphics/graphics_context.h>
 #include <nova/core/logger.h>
 #include <nova/core/window.h>
 
@@ -28,7 +28,7 @@ public:
 private:
   ApplicationSpecification m_spec;
   std::shared_ptr<core::Window> m_window;
-  std::shared_ptr<core::GraphicsContext> m_context;
+  std::shared_ptr<graphics::GraphicsContext> m_context;
 };
 
 }  // namespace nova

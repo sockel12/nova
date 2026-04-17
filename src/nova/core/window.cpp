@@ -1,7 +1,5 @@
 #include <nova/core/window.h>
 
-#include "GLFW/glfw3.h"
-
 namespace nova::core
 {
 
