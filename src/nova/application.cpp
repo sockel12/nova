@@ -1,5 +1,9 @@
 #include <nova/application.h>
 
+#include <nova/core/file_handler.h>
+
+#include <nova/graphics/shader.h>
+
 #include <nova/graphics/renderer/render_command.h>
 
 #include <nova/graphics/buffers/vertex_buffer.h>
@@ -84,15 +88,27 @@ void Application::run()
   auto vertex_array_object = nvb::VertexArrayObject::create(m_context->api());
   vertex_array_object->add_vertex_buffer(vertex_buffer);
 
+  auto shader = graphics::Shader::create(
+      m_context->api(),
+      graphics::ShaderSource(core::FileHandler::read_file("resources/basic_vertex.glsl"),
+                             core::FileHandler::read_file("resources/basic_fragment.glsl")));
+  if (!shader || !shader->valid())
+  {
+    core::logger()->error("Failed to create shader");
+    return;
+  }
+
   ngr::RenderCommand::set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 
   while (!glfwWindowShouldClose(m_window->native_window()))
   {
     ngr::RenderCommand::clear();
 
+    shader->bind();
     vertex_array_object->bind();
     ngr::RenderCommand::draw_arrays(ngr::PrimitiveType::TRIANGLES, 3);
     vertex_array_object->unbind();
+    shader->unbind();
 
     m_window->poll_events();
 
