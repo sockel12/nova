@@ -8,6 +8,7 @@
 
 #include <nova/graphics/buffers/vertex_buffer.h>
 #include <nova/graphics/buffers/vertex_array_object.h>
+#include <nova/graphics/buffers/index_buffer.h>
 
 namespace nova
 {
@@ -75,8 +76,11 @@ void Application::run()
   float vertices[12] = {
       -0.5f, -0.5f, 0.0f,  // bottom left
       0.5f,  -0.5f, 0.0f,  // bottom right
-      0.0f,  0.5f,  0.0f   // top center
+      -0.5f, 0.5f,  0.0f,  // top left
+      0.5f,  0.5f,  0.0f   // top right
   };
+
+  uint32_t indices[6] = {0, 1, 2, 1, 3, 2};
 
   nvb::VertexBufferLayout layout;
   layout.emplace_back("a_position", graphics::buffers::ShaderDataType::FLOAT3, false);
@@ -85,8 +89,12 @@ void Application::run()
   vertex_buffer->data(vertices, sizeof(vertices));
   vertex_buffer->buffer_layout(layout);
 
+  auto index_buffer = nvb::IndexBuffer::create(m_context->api());
+  index_buffer->data(indices, sizeof(indices) / sizeof(uint32_t));
+
   auto vertex_array_object = nvb::VertexArrayObject::create(m_context->api());
   vertex_array_object->add_vertex_buffer(vertex_buffer);
+  vertex_array_object->set_index_buffer(index_buffer);
 
   auto shader = graphics::Shader::create(
       m_context->api(),
@@ -106,7 +114,8 @@ void Application::run()
 
     shader->bind();
     vertex_array_object->bind();
-    ngr::RenderCommand::draw_arrays(ngr::PrimitiveType::TRIANGLES, 3);
+    // ngr::RenderCommand::draw_arrays(ngr::PrimitiveType::TRIANGLES, );
+    ngr::RenderCommand::draw_indexed(index_buffer->count());
     vertex_array_object->unbind();
     shader->unbind();
 

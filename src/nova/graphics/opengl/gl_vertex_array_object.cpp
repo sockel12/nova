@@ -31,6 +31,15 @@ void GLVertexArrayObject::add_vertex_buffer(
   m_vertex_buffers.push_back(vertex_buffer);
 }
 
+void GLVertexArrayObject::set_index_buffer(
+    const std::shared_ptr<buffers::IndexBuffer>& index_buffer)
+{
+  bind();
+  index_buffer->bind();
+
+  m_index_buffer = index_buffer;
+}
+
 void GLVertexArrayObject::bind() const { GL_CALL(glBindVertexArray(m_array_id)); }
 
 void GLVertexArrayObject::unbind() const { GL_CALL(glBindVertexArray(0)); }

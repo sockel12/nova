@@ -14,6 +14,7 @@ public:
   ~GLVertexArrayObject() override;
 
   void add_vertex_buffer(const std::shared_ptr<buffers::VertexBuffer>& vertex_buffer) override;
+  void set_index_buffer(const std::shared_ptr<buffers::IndexBuffer>& index_buffer) override;
 
   void bind() const override;
   void unbind() const override;
