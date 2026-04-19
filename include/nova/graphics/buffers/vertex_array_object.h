@@ -15,7 +15,10 @@ class VertexArrayObject : public Buffer
 {
 public:
   VertexArrayObject() = default;
+  VertexArrayObject(VertexArrayObject& other) = delete;
   virtual ~VertexArrayObject() = default;
+
+  VertexArrayObject& operator=(VertexArrayObject& other) = delete;
 
   virtual void add_vertex_buffer(const std::shared_ptr<VertexBuffer>& vertex_buffer) = 0;
   const std::vector<std::shared_ptr<VertexBuffer>>& vertex_buffers() const

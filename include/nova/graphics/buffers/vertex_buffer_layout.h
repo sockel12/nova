@@ -4,27 +4,10 @@
 #include <vector>
 #include <cstdint>
 
+#include <nova/graphics/graphics_api.h>
+
 namespace nova::graphics::buffers
 {
-
-enum class ShaderDataType
-{
-  FLOAT,
-  FLOAT2,
-  FLOAT3,
-  FLOAT4,
-
-  MAT3,
-  MAT4,
-
-  INT,
-  INT2,
-  INT3,
-  INT4,
-};
-
-uint32_t shader_data_type_size(ShaderDataType type);
-uint32_t shader_data_type_component_count(ShaderDataType type);
 
 class VertexBufferElement
 {

@@ -1,5 +1,6 @@
 #include <nova/graphics/opengl/gl_shader.h>
-#include "nova/core/logger.h"
+
+#include <nova/core/logger.h>
 
 namespace nova::graphics::opengl
 {
@@ -46,6 +47,76 @@ bool GLShader::load(const ShaderSource& source)
   }
 
   return true;
+}
+
+void GLShader::set_uniform_int(const std::string& name, int value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniform1i(location, value));
+}
+
+void GLShader::set_uniform_int2(const std::string& name, const glm::ivec2& value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniform2i(location, value.x, value.y));
+}
+
+void GLShader::set_uniform_int3(const std::string& name, const glm::ivec3& value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniform3i(location, value.x, value.y, value.z));
+}
+
+void GLShader::set_uniform_int4(const std::string& name, const glm::ivec4& value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniform4i(location, value.x, value.y, value.z, value.w));
+}
+
+void GLShader::set_uniform_float(const std::string& name, float value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniform1f(location, value));
+}
+
+void GLShader::set_uniform_float2(const std::string& name, const glm::vec2& value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniform2f(location, value.x, value.y));
+}
+
+void GLShader::set_uniform_float3(const std::string& name, const glm::vec3& value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniform3f(location, value.x, value.y, value.z));
+}
+
+void GLShader::set_uniform_float4(const std::string& name, const glm::vec4& value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniform4f(location, value.x, value.y, value.z, value.w));
+}
+
+void GLShader::set_uniform_mat3(const std::string& name, const glm::mat3& value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniformMatrix3fv(location, 1, GL_FALSE, &value[0][0]));
+}
+
+void GLShader::set_uniform_mat4(const std::string& name, const glm::mat4& value)
+{
+  GLint location = get_uniform_location(name);
+  if (location != -1)
+    GL_CALL(glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]));
 }
 
 void GLShader::bind() const { GL_CALL(glUseProgram(m_program_id)); }
@@ -97,6 +168,22 @@ GLuint GLShader::link_program(GLuint vertex_shader_id, GLuint fragment_shader_id
   }
 
   return program_id;
+}
+
+GLint GLShader::get_uniform_location(const std::string& name)
+{
+  if (m_uniform_location_cache.find(name) != m_uniform_location_cache.end())
+    return m_uniform_location_cache[name];
+
+  GLint location;
+  GL_CALL(location = glGetUniformLocation(m_program_id, name.c_str()));
+  if (location == -1)
+  {
+    core::logger()->warn("Uniform '{}' not found in shader", name);
+    return -1;
+  }
+  m_uniform_location_cache[name] = location;
+  return location;
 }
 
 }  // namespace nova::graphics::opengl

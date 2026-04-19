@@ -21,6 +21,7 @@ void GLVertexArrayObject::add_vertex_buffer(
   uint32_t index = 0;
   for (const auto& element : layout.elements())
   {
+    /** TODO: Implement matrix support */
     GL_CALL(glEnableVertexAttribArray(index));
     GL_CALL(glVertexAttribPointer(index, shader_data_type_component_count(element.type()), GL_FLOAT,
                                   element.normalized() ? GL_TRUE : GL_FALSE, layout.stride(),

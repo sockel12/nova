@@ -28,10 +28,20 @@ public:
 
   void run();
 
+  const ApplicationSpecification& spec() const { return m_spec; }
+  const std::shared_ptr<core::Window>& window() const { return m_window; }
+  const std::shared_ptr<graphics::GraphicsContext>& context() const { return m_context; }
+
+public:
+  static Application* app();
+
 private:
   ApplicationSpecification m_spec;
   std::shared_ptr<core::Window> m_window;
   std::shared_ptr<graphics::GraphicsContext> m_context;
+
+private:
+  static Application* s_instance;
 };
 
 }  // namespace nova

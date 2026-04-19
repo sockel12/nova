@@ -63,13 +63,15 @@ bool OpenGLContext::init()
 
   if (m_spec.debug)
   {
-    glEnable(GL_DEBUG_OUTPUT);
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    GL_CALL(glEnable(GL_DEBUG_OUTPUT));
+    GL_CALL(glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
 
 #ifndef __APPLE__
-    glDebugMessageCallback(opengl_debug_callback, nullptr);
+    GL_CALL(glDebugMessageCallback(opengl_debug_callback, nullptr));
 #endif
   }
+
+  this->vsync(m_spec.vsync);
 
   return true;
 }
@@ -78,6 +80,10 @@ void OpenGLContext::shutdown() { glfwMakeContextCurrent(nullptr); }
 
 void OpenGLContext::swap_buffers() { glfwSwapBuffers(m_window->native_window()); }
 
-void OpenGLContext::vsync(bool enabled) { m_spec.vsync = enabled; }
+void OpenGLContext::vsync(bool enabled)
+{
+  m_spec.vsync = enabled;
+  glfwSwapInterval(enabled ? 1 : 0);
+}
 
 }  // namespace nova::graphics::opengl

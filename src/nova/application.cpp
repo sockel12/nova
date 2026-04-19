@@ -1,14 +1,19 @@
 #include <nova/application.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <nova/core/file_handler.h>
 
+#include <nova/graphics/graphics_api.h>
 #include <nova/graphics/shader.h>
 
 #include <nova/graphics/renderer/render_command.h>
 
-#include <nova/graphics/buffers/vertex_buffer.h>
-#include <nova/graphics/buffers/vertex_array_object.h>
-#include <nova/graphics/buffers/index_buffer.h>
+#include <nova/graphics/mesh_data.h>
+#include <nova/graphics/mesh.h>
+
+#include <nova/graphics/buffers/vertex_buffer_layout.h>
 
 namespace nova
 {
@@ -16,9 +21,17 @@ namespace nova
 namespace ngr = nova::graphics::renderer;
 namespace nvb = nova::graphics::buffers;
 
+Application* Application::s_instance = nullptr;
+
 Application::Application(ApplicationSpecification spec)
     : m_spec(spec), m_window(nullptr), m_context(nullptr)
 {
+  if (s_instance)
+  {
+    core::logger()->error("Application instance already exists");
+    throw std::runtime_error("Application instance already exists");
+  }
+  s_instance = this;
 }
 
 Application::~Application() { shutdown(); }
@@ -73,56 +86,80 @@ void Application::run()
 {
   bool should_close = false;
 
-  float vertices[12] = {
-      -0.5f, -0.5f, 0.0f,  // bottom left
-      0.5f,  -0.5f, 0.0f,  // bottom right
-      -0.5f, 0.5f,  0.0f,  // top left
-      0.5f,  0.5f,  0.0f   // top right
+  std::vector<glm::vec3> vertices = {
+      glm::vec3(-0.5f, -0.5f, 0.0f),  // bottom left
+      glm::vec3(0.5f, -0.5f, 0.0f),   // bottom right
+      glm::vec3(-0.5f, 0.5f, 0.0f),   // top left
+      glm::vec3(0.5f, 0.5f, 0.0f)     // top right
   };
 
-  uint32_t indices[6] = {0, 1, 2, 1, 3, 2};
+  std::vector<uint32_t> indices = {0, 1, 2, 1, 3, 2};
 
-  nvb::VertexBufferLayout layout;
-  layout.emplace_back("a_position", graphics::buffers::ShaderDataType::FLOAT3, false);
+  nvb::VertexBufferLayout layout({
+      {"a_Position", graphics::ShaderDataType::FLOAT3, false},
+  });
 
-  auto vertex_buffer = nvb::VertexBuffer::create(m_context->api());
-  vertex_buffer->data(vertices, sizeof(vertices));
-  vertex_buffer->buffer_layout(layout);
+  std::shared_ptr<graphics::MeshData<glm::vec3>> mesh_data =
+      std::make_shared<graphics::MeshData<glm::vec3>>(vertices, indices, layout);
 
-  auto index_buffer = nvb::IndexBuffer::create(m_context->api());
-  index_buffer->data(indices, sizeof(indices) / sizeof(uint32_t));
-
-  auto vertex_array_object = nvb::VertexArrayObject::create(m_context->api());
-  vertex_array_object->add_vertex_buffer(vertex_buffer);
-  vertex_array_object->set_index_buffer(index_buffer);
+  graphics::Mesh mesh(mesh_data);
 
   auto shader = graphics::Shader::create(
       m_context->api(),
       graphics::ShaderSource(core::FileHandler::read_file("resources/basic_vertex.glsl"),
                              core::FileHandler::read_file("resources/basic_fragment.glsl")));
+
   if (!shader || !shader->valid())
   {
     core::logger()->error("Failed to create shader");
     return;
   }
 
+  glm::mat4 model = glm::mat4(1.0f);
+
   ngr::RenderCommand::set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
+
+  double last_time = glfwGetTime();
+  double delta_time = 0.0;
+  size_t frame_count = 0;
 
   while (!glfwWindowShouldClose(m_window->native_window()))
   {
     ngr::RenderCommand::clear();
 
+    model = glm::rotate(model, glm::radians(15.0f * static_cast<float>(delta_time)),
+                        glm::vec3(0.0f, 0.0f, 1.0f));
+
     shader->bind();
-    vertex_array_object->bind();
-    // ngr::RenderCommand::draw_arrays(ngr::PrimitiveType::TRIANGLES, );
-    ngr::RenderCommand::draw_indexed(index_buffer->count());
-    vertex_array_object->unbind();
+    mesh.bind();
+    shader->set_uniform_mat4("u_Model", model);
+    shader->set_uniform_float3("u_Color", glm::vec3(0.2f, 0.3f, 0.8f));
+    // ngr::RenderCommand::draw_arrays(ngr::PrimitiveType::TRIANGLES, 3);
+    ngr::RenderCommand::draw_indexed(mesh.indices_count());
+    mesh.unbind();
     shader->unbind();
 
     m_window->poll_events();
 
     m_context->swap_buffers();
+
+    // Update FPS every second
+    double current_time = glfwGetTime();
+    frame_count++;
+    delta_time = current_time - last_time;
+    last_time = current_time;
   }
+}
+
+Application* Application::app()
+{
+  if (s_instance == nullptr)
+  {
+    core::logger()->error("Application instance is null");
+    throw std::runtime_error("Application instance is null");
+  }
+
+  return s_instance;
 }
 
 }  // namespace nova
