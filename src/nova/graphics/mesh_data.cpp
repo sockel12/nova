@@ -19,9 +19,10 @@ MeshData MeshData::create_quad()
   mesh_data.indices() = {0, 1, 2, 1, 3, 2};
 
   buffers::VertexBufferLayout layout;
-  layout.push<float>("a_Position");  // position
-  layout.push<float>("a_Normal");    // normal
-  layout.push<float>("a_UV");        // uv
+  layout.push<glm::vec3>("a_Position");  // position
+  layout.push<glm::vec3>("a_Normal");    // normal
+  layout.push<glm::vec2>("a_UV");        // uv
+  layout.update();
 
   mesh_data.vertex_buffer_layout(layout);
 

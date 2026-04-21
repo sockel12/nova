@@ -1,4 +1,5 @@
 #include <nova/graphics/opengl/gl_vertex_array_object.h>
+#include "nova/graphics/opengl/opengl.h"
 
 namespace nova::graphics::opengl
 {
