@@ -1,15 +1,21 @@
 #pragma once
 
+#include <nova/common.h>
+
+#include <nova/core/resource.h>
+
 #include <nova/graphics/shader.h>
 
 namespace nova::graphics
 {
 
-class Material
+class Material : public core::Resource
 {
 public:
   Material() = default;
-  Material(const std::shared_ptr<Shader>& shader);
+
+  void shader(const Ref<Shader>& shader) { m_shader = shader; }
+  const Ref<Shader>& shader() const { return m_shader; }
 
   void set_uniform(const std::string& name, const UniformValue& value);
   std::vector<std::pair<std::string, UniformValue>> uniforms() const;
@@ -17,11 +23,10 @@ public:
   void bind() const;
   void unbind() const;
 
-  static std::shared_ptr<Material> create(const std::shared_ptr<Shader>& shader);
-  static std::shared_ptr<Material> create(const graphics::ShaderSource& source);
+  static Ref<Material> create();
 
 private:
-  std::shared_ptr<Shader> m_shader;
+  Ref<Shader> m_shader;
   std::unordered_map<std::string, UniformValue> m_uniforms;
 };
 

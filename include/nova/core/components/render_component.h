@@ -9,6 +9,7 @@ namespace nova::core::components
 class RenderComponent
 {
 public:
+  RenderComponent() = default;
   RenderComponent(const std::shared_ptr<graphics::Mesh>& mesh,
                   const std::shared_ptr<graphics::Material>& material)
       : mesh(mesh), material(material)

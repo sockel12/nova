@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 
 #include <nova/graphics/graphics_api.h>
 
@@ -20,7 +20,7 @@ public:
   void buffer_layout(const VertexBufferLayout& layout) { m_layout = layout; }
   const VertexBufferLayout& buffer_layout() const { return m_layout; }
 
-  static std::shared_ptr<VertexBuffer> create(GraphicsAPI api);
+  static Ref<VertexBuffer> create(GraphicsAPI api);
 
 protected:
   VertexBufferLayout m_layout;

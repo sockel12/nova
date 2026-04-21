@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 
-namespace nova::grapgics
+namespace nova::graphics
 {
 
 class Texture
@@ -15,10 +15,10 @@ public:
 
   virtual void resize(uint32_t width, uint32_t height) = 0;
 
-  static std::shared_ptr<Texture> create(uint32_t width, uint32_t height);
+  static Ref<Texture> create(uint32_t width, uint32_t height);
 
 protected:
   Texture() = default;
 };
 
-}  // namespace nova::grapgics
+}  // namespace nova::graphics

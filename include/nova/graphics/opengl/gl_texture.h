@@ -4,7 +4,7 @@
 
 #include <nova/graphics/opengl/opengl.h>
 
-namespace nova::grapgics::opengl
+namespace nova::graphics::opengl
 {
 
 class GLTexture : public Texture
@@ -19,4 +19,4 @@ private:
   GLuint m_texture_id;
 };
 
-}  // namespace nova::grapgics::opengl
+}  // namespace nova::graphics::opengl

@@ -10,7 +10,8 @@ class System
 public:
   virtual ~System() = default;
 
-  virtual void update(float delta_time, EntityManager& entity_manager) = 0;
+  virtual void on_update(double delta_time, EntityManager& entity_manager) {}
+  virtual void on_draw(EntityManager& entity_manager) {}
 };
 
 }  // namespace nova::core::systems

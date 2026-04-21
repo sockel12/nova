@@ -5,8 +5,8 @@
 
 namespace nova::graphics
 {
-std::shared_ptr<GraphicsContext> GraphicsContext::create(
-    const std::shared_ptr<core::Window>& window, ContextSpecification spec)
+Ref<GraphicsContext> GraphicsContext::create(const Ref<core::Window>& window,
+                                             ContextSpecification spec)
 {
   switch (spec.api)
   {

@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 file(GLOB_RECURSE TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_executable(nova-test-app ${TEST_SOURCES})
+
+target_precompile_headers(nova-test-app PRIVATE ${PROJECT_SOURCE_DIR}/include/nova/common.h)
 
 target_link_libraries(nova-test-app PRIVATE nova)
 

@@ -1,12 +1,12 @@
 #include <nova/core/scene.h>
 
 #include <nova/core/systems/render_system.h>
-#include "nova/core/components/tag_component.h"
+#include <nova/core/components/tag_component.h>
 
 namespace nova::core
 {
 
-Scene::Scene() : m_entity_manager(std::make_shared<EntityManager>())
+Scene::Scene() : m_entity_manager(std::make_shared<EntityManager>()), m_systems()
 {
   add_system(std::make_shared<systems::RenderSystem>());
 }
@@ -30,11 +30,19 @@ Entity Scene::get_entity(const std::string& name)
 
 void Scene::remove_entity(const Entity& entity) { m_entity_manager->remove_entity(entity); }
 
-void Scene::update(float delta_time)
+void Scene::update(double delta_time)
 {
   for (auto& system : m_systems)
   {
-    system->update(delta_time, *m_entity_manager);
+    system->on_update(delta_time, *m_entity_manager);
+  }
+}
+
+void Scene::draw()
+{
+  for (auto& system : m_systems)
+  {
+    system->on_draw(*m_entity_manager);
   }
 }
 

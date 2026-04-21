@@ -3,9 +3,9 @@
 namespace nova::core
 {
 
-std::shared_ptr<spdlog::logger> logger()
+Ref<spdlog::logger> logger()
 {
-  static std::shared_ptr<spdlog::logger> instance = get_logger("nova");
+  static Ref<spdlog::logger> instance = get_logger("nova");
   return instance;
 }
 

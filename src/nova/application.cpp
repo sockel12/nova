@@ -1,20 +1,13 @@
 #include <nova/application.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <nova/io/resource_manager.h>
 
 #include <nova/core/scene.h>
 #include <nova/core/file_handler.h>
 
 #include <nova/graphics/graphics_api.h>
-#include <nova/graphics/shader.h>
-#include <nova/graphics/mesh_data.h>
-#include <nova/graphics/mesh.h>
-#include <nova/graphics/material.h>
 
 #include <nova/graphics/renderer/renderer.h>
-
-#include <nova/graphics/buffers/vertex_buffer_layout.h>
 
 namespace nova
 {
@@ -60,11 +53,33 @@ bool Application::init()
 
   graphics::renderer::Renderer::init(graphics_api());
 
+  try
+  {
+    m_game = create_game();
+    game().on_init();
+  }
+  catch (const std::exception& e)
+  {
+    core::logger()->error("Failed to initialize game: {}", e.what());
+    return false;
+  }
+
   return true;
 }
 
 void Application::shutdown()
 {
+  if (m_game)
+  {
+    /** Tell the game to shut down */
+    m_game->on_shutdown();
+
+    /** Reset the game pointer */
+    m_game.reset();
+  }
+
+  io::ResourceManager::shutdown();
+
   graphics::renderer::Renderer::shutdown();
 
   if (m_context)
@@ -82,12 +97,6 @@ void Application::shutdown()
 
 void Application::run()
 {
-  if (!m_active_scene)
-  {
-    core::logger()->error("No active scene loaded");
-    return;
-  }
-
   bool should_close = false;
 
   double last_time = glfwGetTime();
@@ -96,17 +105,23 @@ void Application::run()
 
   while (!glfwWindowShouldClose(m_window->native_window()))
   {
+    /** Update the game */
+    game().on_update(delta_time);
+
+    game().current_scene()->update(delta_time);
+
+    /** Start drawing */
     graphics::renderer::Renderer::clear();
 
-    if (m_active_scene)
-    {
-      m_active_scene->update(static_cast<float>(delta_time));
-    }
+    game().current_scene()->draw();
 
+    /** Poll events */
     m_window->poll_events();
 
+    /** Swap buffers */
     m_context->swap_buffers();
 
+    /** Calculate delta time */
     double current_time = glfwGetTime();
     frame_count++;
     delta_time = current_time - last_time;

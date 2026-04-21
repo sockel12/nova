@@ -1,7 +1,5 @@
 #include <nova/graphics/opengl/gl_context.h>
 
-#include "GLFW/glfw3.h"
-#include "glad/gl.h"
 #include "nova/graphics/opengl/opengl.h"
 #include <nova/graphics/graphics_context.h>
 
@@ -31,8 +29,7 @@ void APIENTRY opengl_debug_callback(GLenum source, GLenum type, GLuint id, GLenu
   }
 }
 
-OpenGLContext::OpenGLContext(const std::shared_ptr<core::Window>& window,
-                             graphics::ContextSpecification spec)
+OpenGLContext::OpenGLContext(const Ref<core::Window>& window, graphics::ContextSpecification spec)
     : graphics::GraphicsContext(window, spec)
 {
 }

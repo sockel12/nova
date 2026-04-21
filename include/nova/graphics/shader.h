@@ -1,34 +1,24 @@
 #pragma once
 
-#include <memory>
 #include <string>
-#include <variant>
 
-#include <glm/glm.hpp>
+#include <nova/core/resource.h>
 
 #include <nova/graphics/graphics_api.h>
 
 namespace nova::graphics
 {
 
-class ShaderSource
+struct ShaderSource
 {
-public:
-  ShaderSource() = default;
-  ShaderSource(const std::string& vertex, const std::string& fragment);
-
-  const std::string& vertex_shader() const { return vertexShader; }
-  const std::string& fragment_shader() const { return fragmentShader; }
-
-private:
-  std::string vertexShader;
-  std::string fragmentShader;
+  std::string vertex_shader;
+  std::string fragment_shader;
 };
 
 using UniformValue = std::variant<int, glm::ivec2, glm::ivec3, glm::ivec4, float, glm::vec2,
                                   glm::vec3, glm::vec4, glm::mat3, glm::mat4>;
 
-class Shader
+class Shader : public core::Resource
 {
 public:
   virtual ~Shader() = default;
@@ -56,8 +46,8 @@ public:
   virtual void bind() const = 0;
   virtual void unbind() const = 0;
 
-  static std::shared_ptr<Shader> create(GraphicsAPI api);
-  static std::shared_ptr<Shader> create(GraphicsAPI api, const ShaderSource& source);
+  static Ref<Shader> create();
+  static Ref<Shader> create(const ShaderSource& source);
 
 protected:
   ShaderSource m_source;

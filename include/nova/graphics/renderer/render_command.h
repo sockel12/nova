@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 
 #include <nova/graphics/graphics_api.h>
 
@@ -30,7 +30,7 @@ public:
   static void set_blend(bool enabled);
 
 private:
-  static std::shared_ptr<RendererAPI> s_renderer_api;
+  static Ref<RendererAPI> s_renderer_api;
 };
 
 }  // namespace nova::graphics::renderer

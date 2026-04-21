@@ -11,8 +11,7 @@ GLVertexArrayObject::GLVertexArrayObject()
 
 GLVertexArrayObject::~GLVertexArrayObject() { GL_CALL(glDeleteVertexArrays(1, &m_array_id)); }
 
-void GLVertexArrayObject::add_vertex_buffer(
-    const std::shared_ptr<buffers::VertexBuffer>& vertex_buffer)
+void GLVertexArrayObject::add_vertex_buffer(const Ref<buffers::VertexBuffer>& vertex_buffer)
 {
   bind();
   vertex_buffer->bind();
@@ -32,8 +31,7 @@ void GLVertexArrayObject::add_vertex_buffer(
   m_vertex_buffers.push_back(vertex_buffer);
 }
 
-void GLVertexArrayObject::set_index_buffer(
-    const std::shared_ptr<buffers::IndexBuffer>& index_buffer)
+void GLVertexArrayObject::set_index_buffer(const Ref<buffers::IndexBuffer>& index_buffer)
 {
   bind();
   index_buffer->bind();

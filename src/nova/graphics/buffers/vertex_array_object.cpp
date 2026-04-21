@@ -5,7 +5,7 @@
 namespace nova::graphics::buffers
 {
 
-std::shared_ptr<VertexArrayObject> VertexArrayObject::create(GraphicsAPI api)
+Ref<VertexArrayObject> VertexArrayObject::create(GraphicsAPI api)
 {
   switch (api)
   {

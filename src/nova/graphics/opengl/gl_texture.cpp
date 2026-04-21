@@ -2,7 +2,7 @@
 
 #include <nova/graphics/opengl/opengl.h>
 
-namespace nova::grapgics::opengl
+namespace nova::graphics::opengl
 {
 
 GLTexture::GLTexture(uint32_t width, uint32_t height)
@@ -19,4 +19,4 @@ GLTexture::GLTexture(uint32_t width, uint32_t height)
 void GLTexture::bind() const { GL_CALL(glBindTexture(GL_TEXTURE_2D, m_texture_id)); }
 
 void GLTexture::unbind() const { GL_CALL(glBindTexture(GL_TEXTURE_2D, 0)); }
-}  // namespace nova::grapgics::opengl
+}  // namespace nova::graphics::opengl

@@ -1,6 +1,9 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
+
+#include <nova/application_specification.h>
+#include <nova/game.h>
 
 #include <nova/core/scene.h>
 #include <nova/core/logger.h>
@@ -9,15 +12,19 @@
 #include <nova/graphics/graphics_api.h>
 #include <nova/graphics/graphics_context.h>
 
+/** This function must be overriden by the game enable custom application specification
+ * (e.g. window size, title, etc.). This will be called *BEFORE* the application and graphics
+ * context have been initialized, so the game should *not* attempt to access the application in this
+ * function. */
+extern nova::ApplicationSpecification create_application_specification();
+
+/** This function must be overriden by the game to actually create the game instance. This
+ * will be called *AFTER* the application and graphics context have been initialized, so
+ * the game can safely access the application. */
+extern Ref<nova::Game> create_game();
+
 namespace nova
 {
-
-struct ApplicationSpecification
-{
-  uint32_t width = 1280;
-  uint32_t height = 720;
-  std::string name = "";
-};
 
 class Application
 {
@@ -30,11 +37,12 @@ public:
 
   void run();
 
-  core::Scene& scene() { return *m_active_scene; }
-
   const ApplicationSpecification& spec() const { return m_spec; }
-  const std::shared_ptr<core::Window>& window() const { return m_window; }
-  const std::shared_ptr<graphics::GraphicsContext>& context() const { return m_context; }
+  const Ref<core::Window>& window() const { return m_window; }
+  const Ref<graphics::GraphicsContext>& context() const { return m_context; }
+
+  Game& game() { return *m_game; }
+  const Game& game() const { return *m_game; }
 
 public:
   static Application* instance();
@@ -42,9 +50,9 @@ public:
 
 private:
   ApplicationSpecification m_spec;
-  std::shared_ptr<core::Window> m_window;
-  std::shared_ptr<graphics::GraphicsContext> m_context;
-  std::shared_ptr<core::Scene> m_active_scene;
+  Ref<core::Window> m_window;
+  Ref<graphics::GraphicsContext> m_context;
+  Ref<Game> m_game;
 
 private:
   static Application* s_instance;

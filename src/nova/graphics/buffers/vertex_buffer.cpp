@@ -5,7 +5,7 @@
 namespace nova::graphics::buffers
 {
 
-std::shared_ptr<VertexBuffer> VertexBuffer::create(GraphicsAPI api)
+Ref<VertexBuffer> VertexBuffer::create(GraphicsAPI api)
 {
   switch (api)
   {

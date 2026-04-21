@@ -34,8 +34,10 @@ public:
   VertexBufferLayout();
   VertexBufferLayout(std::initializer_list<VertexBufferElement> elements);
 
-  void emplace_back(VertexBufferElement element);
-  void emplace_back(const std::string& name, ShaderDataType type, bool normalized = false);
+  void update();
+
+  template <typename T>
+  void push(const std::string& name, bool normalized = false);
 
   uint32_t stride() const { return m_stride; }
 

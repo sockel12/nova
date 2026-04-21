@@ -1,11 +1,12 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 
 #include <nova/core/entity.h>
 #include <nova/core/entity_manager.h>
 
 #include <nova/core/systems/system.h>
+#include "nova/core/systems/render_system.h"
 
 namespace nova::core
 {
@@ -22,7 +23,7 @@ public:
   void remove_entity(const Entity& entity);
 
   template <typename System>
-  void add_system(const std::shared_ptr<System>& system)
+  void add_system(const Ref<System>& system)
   {
     m_systems.emplace_back(system);
   }
@@ -30,17 +31,18 @@ public:
   template <typename System>
   void remove_system()
   {
-    m_systems.erase(std::remove_if(m_systems.begin(), m_systems.end(),
-                                   [](const std::shared_ptr<systems::System>& s)
-                                   { return std::dynamic_pointer_cast<System>(s) != nullptr; }),
-                    m_systems.end());
+    m_systems.erase(
+        std::remove_if(m_systems.begin(), m_systems.end(), [](const Ref<systems::System>& s)
+                       { return std::dynamic_pointer_cast<System>(s) != nullptr; }),
+        m_systems.end());
   }
 
-  void update(float delta_time);
+  void update(double delta_time);
+  void draw();
 
 private:
-  std::shared_ptr<EntityManager> m_entity_manager;
-  std::vector<std::shared_ptr<systems::System>> m_systems;
+  Ref<EntityManager> m_entity_manager;
+  std::vector<Ref<systems::System>> m_systems;
 };
 
 }  // namespace nova::core

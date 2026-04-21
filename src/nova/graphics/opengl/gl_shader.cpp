@@ -23,13 +23,13 @@ bool GLShader::load(const ShaderSource& source)
 {
   Shader::load(source);
 
-  m_vertex_shader_id = compile_shader(m_source.vertex_shader(), GlShaderType::VERTEX_SHADER);
+  m_vertex_shader_id = compile_shader(m_source.vertex_shader, GlShaderType::VERTEX_SHADER);
   if (m_vertex_shader_id == 0)
   {
     return false;
   }
 
-  m_fragment_shader_id = compile_shader(m_source.fragment_shader(), GlShaderType::FRAGMENT_SHADER);
+  m_fragment_shader_id = compile_shader(m_source.fragment_shader, GlShaderType::FRAGMENT_SHADER);
   if (m_fragment_shader_id == 0)
   {
     GL_CALL(glDeleteShader(m_vertex_shader_id));

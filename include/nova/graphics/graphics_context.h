@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 
 #include <nova/core/window.h>
 #include <nova/graphics/graphics_api.h>
@@ -18,7 +18,7 @@ struct ContextSpecification
 class GraphicsContext
 {
 public:
-  GraphicsContext(const std::shared_ptr<core::Window>& window, ContextSpecification spec)
+  GraphicsContext(const Ref<core::Window>& window, ContextSpecification spec)
       : m_window(window), m_spec(spec)
   {
   }
@@ -36,12 +36,11 @@ public:
 
   virtual GraphicsAPI api() const = 0;
 
-  static std::shared_ptr<GraphicsContext> create(
-      const std::shared_ptr<core::Window>& window,
-      ContextSpecification spec = ContextSpecification());
+  static Ref<GraphicsContext> create(const Ref<core::Window>& window,
+                                     ContextSpecification spec = ContextSpecification());
 
 protected:
-  std::shared_ptr<core::Window> m_window;
+  Ref<core::Window> m_window;
   ContextSpecification m_spec;
 };
 

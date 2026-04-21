@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 
 #include <nova/core/logger.h>
 
@@ -12,7 +12,7 @@
 namespace nova::graphics::opengl
 {
 
-std::shared_ptr<spdlog::logger> logger();
+Ref<spdlog::logger> logger();
 
 }
 

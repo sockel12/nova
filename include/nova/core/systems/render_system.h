@@ -12,7 +12,7 @@ class RenderSystem : public System
 public:
   RenderSystem() = default;
 
-  void update(float delta_time, EntityManager& entity_manager);
+  void on_draw(EntityManager& entity_manager);
 
 private:
 };

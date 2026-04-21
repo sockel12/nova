@@ -5,8 +5,6 @@
 namespace nova::graphics
 {
 
-Material::Material(const std::shared_ptr<Shader>& shader) : m_shader(shader) {}
-
 void Material::set_uniform(const std::string& name, const UniformValue& value)
 {
   m_uniforms[name] = value;
@@ -47,25 +45,6 @@ void Material::unbind() const
   }
 }
 
-std::shared_ptr<Material> Material::create(const std::shared_ptr<Shader>& shader)
-{
-  if (!shader || !shader->valid())
-  {
-    core::logger()->error("Failed to create material: invalid shader");
-    return nullptr;
-  }
-  return std::make_shared<Material>(shader);
-}
-
-std::shared_ptr<Material> Material::create(const graphics::ShaderSource& source)
-{
-  std::shared_ptr<Shader> shader = Shader::create(Application::graphics_api(), source);
-  if (!shader || !shader->valid())
-  {
-    core::logger()->error("Failed to create shader for material");
-    return nullptr;
-  }
-  return std::make_shared<Material>(shader);
-}
+Ref<Material> Material::create() { return std::make_shared<Material>(); }
 
 }  // namespace nova::graphics

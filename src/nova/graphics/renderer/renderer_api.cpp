@@ -5,7 +5,7 @@
 namespace nova::graphics::renderer
 {
 
-std::shared_ptr<RendererAPI> RendererAPI::create(graphics::GraphicsAPI api)
+Ref<RendererAPI> RendererAPI::create(graphics::GraphicsAPI api)
 {
   switch (api)
   {

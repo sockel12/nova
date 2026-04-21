@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 #include <vector>
 
 #include <nova/graphics/graphics_api.h>
@@ -20,20 +20,17 @@ public:
 
   VertexArrayObject& operator=(VertexArrayObject& other) = delete;
 
-  virtual void add_vertex_buffer(const std::shared_ptr<VertexBuffer>& vertex_buffer) = 0;
-  const std::vector<std::shared_ptr<VertexBuffer>>& vertex_buffers() const
-  {
-    return m_vertex_buffers;
-  }
+  virtual void add_vertex_buffer(const Ref<VertexBuffer>& vertex_buffer) = 0;
+  const std::vector<Ref<VertexBuffer>>& vertex_buffers() const { return m_vertex_buffers; }
 
-  virtual void set_index_buffer(const std::shared_ptr<IndexBuffer>& index_buffer) = 0;
-  const std::shared_ptr<IndexBuffer>& index_buffer() const { return m_index_buffer; }
+  virtual void set_index_buffer(const Ref<IndexBuffer>& index_buffer) = 0;
+  const Ref<IndexBuffer>& index_buffer() const { return m_index_buffer; }
 
-  static std::shared_ptr<VertexArrayObject> create(GraphicsAPI api);
+  static Ref<VertexArrayObject> create(GraphicsAPI api);
 
 protected:
-  std::vector<std::shared_ptr<VertexBuffer>> m_vertex_buffers;
-  std::shared_ptr<IndexBuffer> m_index_buffer;
+  std::vector<Ref<VertexBuffer>> m_vertex_buffers;
+  Ref<IndexBuffer> m_index_buffer;
 };
 
 }  // namespace nova::graphics::buffers

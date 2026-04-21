@@ -1,6 +1,8 @@
 #pragma once
 
-#include <vector>
+#include <nova/common.h>
+
+#include <nova/core/resource.h>
 
 #include <nova/graphics/mesh_data.h>
 
@@ -8,30 +10,39 @@
 #include <nova/graphics/buffers/vertex_buffer.h>
 #include <nova/graphics/buffers/index_buffer.h>
 
+enum class MeshPrimitive
+{
+  QUAD
+};
+
 namespace nova::graphics
 {
 
-class Mesh
+class Mesh : public core::Resource
 {
 public:
-  Mesh(const std::shared_ptr<BaseMeshData>& data);
+  Mesh();
+  Mesh(const MeshData& mesh_data);
 
-  void update_mesh_data(const std::shared_ptr<BaseMeshData>& data);
-  const std::shared_ptr<BaseMeshData>& mesh_data() const { return m_mesh_data; }
-
-  size_t indices_count() const { return m_mesh_data->indices().size(); }
+  void update();
 
   void bind() const;
   void unbind() const;
 
-  static std::shared_ptr<Mesh> create(const std::shared_ptr<BaseMeshData>& data);
+  static Ref<Mesh> create();
+  static Ref<Mesh> create(MeshPrimitive primitive);
+
+  MeshData& mesh_data() { return m_mesh_data; }
+  const MeshData& mesh_data() const { return m_mesh_data; }
 
 private:
+  void init();
+
 private:
-  std::shared_ptr<BaseMeshData> m_mesh_data;
-  std::shared_ptr<buffers::VertexArrayObject> m_vao;
-  std::shared_ptr<buffers::VertexBuffer> m_vertex_buffer;
-  std::shared_ptr<buffers::IndexBuffer> m_index_buffer;
+  MeshData m_mesh_data;
+  Ref<buffers::VertexArrayObject> m_vao;
+  Ref<buffers::VertexBuffer> m_vertex_buffer;
+  Ref<buffers::IndexBuffer> m_index_buffer;
 };
 
 }  // namespace nova::graphics

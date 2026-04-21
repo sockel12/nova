@@ -1,14 +1,11 @@
 #include <nova/graphics/shader.h>
 
+#include <nova/application.h>
+
 #include <nova/graphics/opengl/gl_shader.h>
 
 namespace nova::graphics
 {
-
-ShaderSource::ShaderSource(const std::string& vertex, const std::string& fragment)
-    : vertexShader(vertex), fragmentShader(fragment)
-{
-}
 
 bool Shader::load(const ShaderSource& source)
 {
@@ -16,9 +13,9 @@ bool Shader::load(const ShaderSource& source)
   return true;
 }
 
-std::shared_ptr<Shader> Shader::create(GraphicsAPI api)
+Ref<Shader> Shader::create()
 {
-  switch (api)
+  switch (Application::graphics_api())
   {
     case GraphicsAPI::OPENGL:
       return std::make_shared<opengl::GLShader>();
@@ -28,20 +25,15 @@ std::shared_ptr<Shader> Shader::create(GraphicsAPI api)
   }
 }
 
-std::shared_ptr<Shader> Shader::create(GraphicsAPI api, const ShaderSource& source)
+Ref<Shader> Shader::create(const ShaderSource& source)
 {
-  switch (api)
+  auto shader = create();
+  if (shader && shader->load(source))
   {
-    case GraphicsAPI::OPENGL:
-    {
-      auto shader = std::make_shared<opengl::GLShader>();
-      shader->load(source);
-      return shader;
-    }
-    default:
-      core::logger()->error("Unsupported graphics API");
-      return nullptr;
+    return shader;
   }
+  core::logger()->error("Failed to create and load shader");
+  return nullptr;
 }
 
 }  // namespace nova::graphics

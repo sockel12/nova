@@ -5,7 +5,7 @@
 namespace nova::graphics::buffers
 {
 
-std::shared_ptr<IndexBuffer> IndexBuffer::create(GraphicsAPI api)
+Ref<IndexBuffer> IndexBuffer::create(GraphicsAPI api)
 {
   switch (api)
   {

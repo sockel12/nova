@@ -7,7 +7,7 @@
 namespace nova::graphics::renderer
 {
 
-std::shared_ptr<RendererAPI> Renderer::m_renderer_api = nullptr;
+Ref<RendererAPI> Renderer::m_renderer_api = nullptr;
 
 void Renderer::init(GraphicsAPI graphics_api)
 {
@@ -31,7 +31,7 @@ void Renderer::shutdown()
   m_renderer_api->shutdown();
 }
 
-void Renderer::submit(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material)
+void Renderer::submit(const Ref<Mesh>& mesh, const Ref<Material>& material)
 {
   if (!m_renderer_api || !m_renderer_api->initialized())
   {
@@ -39,9 +39,21 @@ void Renderer::submit(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<M
     return;
   }
 
+  if (!material || !material->shader())
+  {
+    core::logger()->warn("Material or shader is null. Cannot submit draw call.");
+    return;
+  }
+
+  if (!mesh)
+  {
+    core::logger()->warn("Mesh is null. Cannot submit draw call.");
+    return;
+  }
+
   material->bind();
   mesh->bind();
-  m_renderer_api->draw_indexed(mesh->indices_count());
+  m_renderer_api->draw_indexed(mesh->mesh_data().indices().size());
   mesh->unbind();
   material->unbind();
 }

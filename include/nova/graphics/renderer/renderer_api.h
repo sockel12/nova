@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 #include <cstdint>
 
 #include <nova/graphics/graphics_api.h>
@@ -35,7 +35,7 @@ public:
   virtual void set_depth_test(bool enabled) = 0;
   virtual void set_blend(bool enabled) = 0;
 
-  static std::shared_ptr<RendererAPI> create(graphics::GraphicsAPI api);
+  static Ref<RendererAPI> create(graphics::GraphicsAPI api);
 };
 
 }  // namespace nova::graphics::renderer

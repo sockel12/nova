@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <nova/common.h>
 #include <vector>
 
 #include <nova/graphics/graphics_api.h>
@@ -20,7 +20,7 @@ public:
 
   virtual size_t count() const = 0;
 
-  static std::shared_ptr<IndexBuffer> create(GraphicsAPI api);
+  static Ref<IndexBuffer> create(GraphicsAPI api);
 };
 
 }  // namespace nova::graphics::buffers

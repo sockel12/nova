@@ -59,6 +59,8 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
 
 add_library(nova STATIC ${SRC_FILES})
 
+target_precompile_headers(nova PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/nova/common.h)
+
 target_compile_definitions(nova PUBLIC
     GLFW_INCLUDE_NONE
 )

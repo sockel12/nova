@@ -12,7 +12,7 @@ namespace nova::graphics::opengl
 class OpenGLContext : public graphics::GraphicsContext
 {
 public:
-  OpenGLContext(const std::shared_ptr<core::Window>& window, graphics::ContextSpecification spec);
+  OpenGLContext(const Ref<core::Window>& window, graphics::ContextSpecification spec);
   ~OpenGLContext();
 
   void setup_window_hints() override;
