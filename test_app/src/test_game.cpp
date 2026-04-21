@@ -1,4 +1,5 @@
 #include <test_game.h>
+#include <test_system.h>
 
 #include <nova/graphics/shader.h>
 
@@ -16,6 +17,8 @@ nova::ApplicationSpecification create_application_specification()
 Ref<nova::Game> create_game()
 {
   auto scene = std::make_shared<nova::core::Scene>();
+
+  scene->add_system(std::make_shared<TestSystem>());
 
   auto test_entity = scene->add_entity("Test Entity");
   auto& rc = test_entity.add_component<nova::core::components::RenderComponent>();
