@@ -1,5 +1,6 @@
 #include <nova/graphics/material.h>
-#include "nova/application.h"
+
+#include <nova/application.h>
 
 namespace nova::graphics
 {
@@ -11,6 +12,7 @@ void Material::set_uniform(const std::string& name, const UniformValue& value)
   m_uniforms[name] = value;
   if (m_shader && m_shader->valid())
   {
+    m_shader->bind();
     m_shader->set_uniform(name, value);
   }
 }

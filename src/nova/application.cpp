@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <nova/core/scene.h>
 #include <nova/core/file_handler.h>
 
 #include <nova/graphics/graphics_api.h>
@@ -11,15 +12,12 @@
 #include <nova/graphics/mesh.h>
 #include <nova/graphics/material.h>
 
-#include <nova/graphics/renderer/render_command.h>
+#include <nova/graphics/renderer/renderer.h>
 
 #include <nova/graphics/buffers/vertex_buffer_layout.h>
 
 namespace nova
 {
-
-namespace ngr = nova::graphics::renderer;
-namespace nvb = nova::graphics::buffers;
 
 Application* Application::s_instance = nullptr;
 
@@ -60,14 +58,14 @@ bool Application::init()
     return false;
   }
 
-  ngr::RenderCommand::init(graphics::GraphicsAPI::OPENGL);
+  graphics::renderer::Renderer::init(graphics_api());
 
   return true;
 }
 
 void Application::shutdown()
 {
-  ngr::RenderCommand::shutdown();
+  graphics::renderer::Renderer::shutdown();
 
   if (m_context)
   {
@@ -84,35 +82,13 @@ void Application::shutdown()
 
 void Application::run()
 {
+  if (!m_active_scene)
+  {
+    core::logger()->error("No active scene loaded");
+    return;
+  }
+
   bool should_close = false;
-
-  std::vector<glm::vec3> vertices = {
-      glm::vec3(-0.5f, -0.5f, 0.0f),  // bottom left
-      glm::vec3(0.5f, -0.5f, 0.0f),   // bottom right
-      glm::vec3(-0.5f, 0.5f, 0.0f),   // top left
-      glm::vec3(0.5f, 0.5f, 0.0f)     // top right
-  };
-
-  std::vector<uint32_t> indices = {0, 1, 2, 1, 3, 2};
-
-  nvb::VertexBufferLayout layout({
-      {"a_Position", graphics::ShaderDataType::FLOAT3, false},
-  });
-
-  std::shared_ptr<graphics::MeshData<glm::vec3>> mesh_data =
-      std::make_shared<graphics::MeshData<glm::vec3>>(vertices, indices, layout);
-
-  graphics::Mesh mesh(mesh_data);
-
-  auto material = graphics::Material::create(
-      graphics::ShaderSource(core::FileHandler::read_file("resources/basic_vertex.glsl"),
-                             core::FileHandler::read_file("resources/basic_fragment.glsl")));
-
-  material->set_uniform("u_Color", glm::vec3(0.2f, 0.3f, 0.8f));
-
-  glm::mat4 model = glm::mat4(1.0f);
-
-  ngr::RenderCommand::set_clear_color(0.1f, 0.1f, 0.1f, 1.0f);
 
   double last_time = glfwGetTime();
   double delta_time = 0.0;
@@ -120,24 +96,17 @@ void Application::run()
 
   while (!glfwWindowShouldClose(m_window->native_window()))
   {
-    ngr::RenderCommand::clear();
+    graphics::renderer::Renderer::clear();
 
-    model = glm::rotate(model, glm::radians(15.0f * static_cast<float>(delta_time)),
-                        glm::vec3(0.0f, 0.0f, 1.0f));
-
-    material->bind();
-    mesh.bind();
-    material->set_uniform("u_Model", model);
-    // ngr::RenderCommand::draw_arrays(ngr::PrimitiveType::TRIANGLES, 3);
-    ngr::RenderCommand::draw_indexed(mesh.indices_count());
-    mesh.unbind();
-    material->unbind();
+    if (m_active_scene)
+    {
+      m_active_scene->update(static_cast<float>(delta_time));
+    }
 
     m_window->poll_events();
 
     m_context->swap_buffers();
 
-    // Update FPS every second
     double current_time = glfwGetTime();
     frame_count++;
     delta_time = current_time - last_time;

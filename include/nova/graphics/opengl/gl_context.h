@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_set>
+
 #include <nova/graphics/opengl/opengl.h>
 
 #include <nova/graphics/graphics_context.h>
@@ -24,6 +26,7 @@ public:
   graphics::GraphicsAPI api() const override { return graphics::GraphicsAPI::OPENGL; }
 
 private:
+  std::unordered_set<std::string> m_active_extensions;
 };
 
 }  // namespace nova::graphics::opengl

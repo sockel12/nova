@@ -19,6 +19,8 @@ class RendererAPI
 public:
   virtual ~RendererAPI() = default;
 
+  virtual bool initialized() const = 0;
+
   virtual void init() = 0;
   virtual void shutdown() = 0;
 

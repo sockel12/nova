@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
+
 include(FetchContent)
 
 # SPDLOG dependency
@@ -27,6 +28,14 @@ FetchContent_Declare(
   GIT_TAG 1.0.3
 )
 FetchContent_MakeAvailable(glm)
+
+# EnTT dependency
+FetchContent_Declare(
+  entt
+  GIT_REPOSITORY https://github.com/skypjack/entt.git
+  GIT_TAG v3.16.0
+)
+FetchContent_MakeAvailable(entt)
 
 # GLFW dependency
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -59,10 +68,11 @@ target_include_directories(nova
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-
+ 
 target_link_libraries(nova 
   PUBLIC 
   spdlog::spdlog
+  EnTT::EnTT
   glfw
   glad
   glm

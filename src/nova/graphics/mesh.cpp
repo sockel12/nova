@@ -35,4 +35,9 @@ void Mesh::bind() const { m_vao->bind(); }
 
 void Mesh::unbind() const { m_vao->unbind(); }
 
+std::shared_ptr<Mesh> Mesh::create(const std::shared_ptr<BaseMeshData>& data)
+{
+  return std::make_shared<Mesh>(data);
+}
+
 }  // namespace nova::graphics

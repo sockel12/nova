@@ -5,14 +5,18 @@
 namespace nova::graphics::opengl
 {
 
+bool GLRendererAPI::initialized() const { return m_initialized; }
+
 void GLRendererAPI::init()
 {
+  m_initialized = true;
+
   GL_CALL(glEnable(GL_BLEND));
   GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
   GL_CALL(glEnable(GL_DEPTH_TEST));
 }
 
-void GLRendererAPI::shutdown() {}
+void GLRendererAPI::shutdown() { m_initialized = false; }
 
 void GLRendererAPI::set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 {

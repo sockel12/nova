@@ -1,5 +1,7 @@
 #include <nova/core/window.h>
 
+#include <nova/core/logger.h>
+
 namespace nova::core
 {
 
@@ -15,6 +17,16 @@ Window::~Window() { shutdown(); }
 bool Window::init()
 {
   m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
+
+  auto size_callback = [](GLFWwindow* window, int width, int height)
+  { core::logger()->info("Window resize: ({}/{})", width, height); };
+  auto fb_callback = [](GLFWwindow* window, int width, int height)
+  { core::logger()->info("Framebuffer resize: ({}/{})", width, height); };
+  auto key_callback = [](GLFWwindow* window, int key, int scancode, int action, int mods) {};
+
+  glfwSetWindowSizeCallback(m_window, size_callback);
+  glfwSetFramebufferSizeCallback(m_window, fb_callback);
+  glfwSetKeyCallback(m_window, key_callback);
 
   return true;
 }

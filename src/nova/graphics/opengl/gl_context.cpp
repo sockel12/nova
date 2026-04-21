@@ -2,6 +2,7 @@
 
 #include "GLFW/glfw3.h"
 #include "glad/gl.h"
+#include "nova/graphics/opengl/opengl.h"
 #include <nova/graphics/graphics_context.h>
 
 namespace nova::graphics::opengl
@@ -61,14 +62,31 @@ bool OpenGLContext::init()
     return false;
   }
 
+  GLint extension_count;
+  GL_CALL(glGetIntegerv(GL_NUM_EXTENSIONS, &extension_count));
+
+  logger()->info("OpenGL");
+  logger()->info("\tVersion: {0}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+  logger()->info("\tVendor: {0}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
+  logger()->info("\tRenderer: {0}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
+  logger()->info("Extensions:");
+  for (GLint i = 0; i < extension_count; i++)
+  {
+    const char* extension = reinterpret_cast<const char*>(glGetStringi(GL_EXTENSIONS, i));
+    m_active_extensions.insert(extension);
+    logger()->info("\t{0}", extension);
+  }
+
   if (m_spec.debug)
   {
-    GL_CALL(glEnable(GL_DEBUG_OUTPUT));
-    GL_CALL(glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
-
-#ifndef __APPLE__
-    GL_CALL(glDebugMessageCallback(opengl_debug_callback, nullptr));
-#endif
+    if (m_active_extensions.count("GL_KHR_debug") != 0 ||
+        m_active_extensions.count("GL_ARB_debug_output") != 0)
+    {
+      logger()->info("Enabling OpenGL debug output");
+      GL_CALL(glEnable(GL_DEBUG_OUTPUT));
+      GL_CALL(glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
+      GL_CALL(glDebugMessageCallback(opengl_debug_callback, nullptr));
+    }
   }
 
   this->vsync(m_spec.vsync);

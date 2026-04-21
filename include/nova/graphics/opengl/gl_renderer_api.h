@@ -11,6 +11,8 @@ public:
   GLRendererAPI() = default;
   ~GLRendererAPI() override = default;
 
+  bool initialized() const override;
+
   void init() override;
   void shutdown() override;
 
@@ -26,6 +28,7 @@ public:
   void set_blend(bool enabled) override;
 
 private:
+  bool m_initialized = false;
 };
 
 }  // namespace nova::graphics::opengl

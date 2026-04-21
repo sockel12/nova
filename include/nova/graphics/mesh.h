@@ -24,6 +24,9 @@ public:
   void bind() const;
   void unbind() const;
 
+  static std::shared_ptr<Mesh> create(const std::shared_ptr<BaseMeshData>& data);
+
+private:
 private:
   std::shared_ptr<BaseMeshData> m_mesh_data;
   std::shared_ptr<buffers::VertexArrayObject> m_vao;
