@@ -20,23 +20,22 @@ class GLShader : public Shader
 {
 public:
   GLShader();
-  GLShader(const ShaderSource& source);
   ~GLShader() override;
 
   bool valid() const override;
 
   bool load(const ShaderSource& source) override;
 
-  void set_uniform_int(const std::string& name, int value) override;
-  void set_uniform_int2(const std::string& name, const glm::ivec2& value) override;
-  void set_uniform_int3(const std::string& name, const glm::ivec3& value) override;
-  void set_uniform_int4(const std::string& name, const glm::ivec4& value) override;
-  void set_uniform_float(const std::string& name, float value) override;
-  void set_uniform_float2(const std::string& name, const glm::vec2& value) override;
-  void set_uniform_float3(const std::string& name, const glm::vec3& value) override;
-  void set_uniform_float4(const std::string& name, const glm::vec4& value) override;
-  void set_uniform_mat3(const std::string& name, const glm::mat3& value) override;
-  void set_uniform_mat4(const std::string& name, const glm::mat4& value) override;
+  void set_uniform(const std::string& name, int value) override;
+  void set_uniform(const std::string& name, const glm::ivec2& value) override;
+  void set_uniform(const std::string& name, const glm::ivec3& value) override;
+  void set_uniform(const std::string& name, const glm::ivec4& value) override;
+  void set_uniform(const std::string& name, float value) override;
+  void set_uniform(const std::string& name, const glm::vec2& value) override;
+  void set_uniform(const std::string& name, const glm::vec3& value) override;
+  void set_uniform(const std::string& name, const glm::vec4& value) override;
+  void set_uniform(const std::string& name, const glm::mat3& value) override;
+  void set_uniform(const std::string& name, const glm::mat4& value) override;
 
   void bind() const override;
   void unbind() const override;

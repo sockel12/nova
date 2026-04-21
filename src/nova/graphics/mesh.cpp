@@ -7,7 +7,7 @@ namespace nova::graphics
 
 Mesh::Mesh(const std::shared_ptr<BaseMeshData>& data) : m_mesh_data(data)
 {
-  GraphicsAPI api = Application::app()->context()->api();
+  GraphicsAPI api = Application::instance()->context()->api();
 
   m_vertex_buffer = buffers::VertexBuffer::create(api);
   m_index_buffer = buffers::IndexBuffer::create(api);
@@ -25,7 +25,7 @@ void Mesh::update_mesh_data(const std::shared_ptr<BaseMeshData>& data)
 
   m_index_buffer->data(m_mesh_data->indices().data(), m_mesh_data->indices().size());
 
-  m_vao = buffers::VertexArrayObject::create(Application::app()->context()->api());
+  m_vao = buffers::VertexArrayObject::create(Application::instance()->context()->api());
 
   m_vao->add_vertex_buffer(m_vertex_buffer);
   m_vao->set_index_buffer(m_index_buffer);

@@ -13,19 +13,19 @@ void APIENTRY opengl_debug_callback(GLenum source, GLenum type, GLuint id, GLenu
   switch (severity)
   {
     case GL_DEBUG_SEVERITY_HIGH:
-      logger()->error("OpenGL Debug: {0}", message);
+      logger()->error("OpenGL: {0}", message);
       break;
     case GL_DEBUG_SEVERITY_MEDIUM:
-      logger()->warn("OpenGL Debug: {0}", message);
+      logger()->warn("OpenGL: {0}", message);
       break;
     case GL_DEBUG_SEVERITY_LOW:
-      logger()->info("OpenGL Debug: {0}", message);
+      logger()->info("OpenGL: {0}", message);
       break;
     case GL_DEBUG_SEVERITY_NOTIFICATION:
-      logger()->trace("OpenGL Debug: {0}", message);
+      logger()->trace("OpenGL: {0}", message);
       break;
     default:
-      logger()->error("OpenGL Debug: {0}", message);
+      logger()->error("OpenGL: {0}", message);
       break;
   }
 }

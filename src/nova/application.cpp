@@ -7,11 +7,11 @@
 
 #include <nova/graphics/graphics_api.h>
 #include <nova/graphics/shader.h>
-
-#include <nova/graphics/renderer/render_command.h>
-
 #include <nova/graphics/mesh_data.h>
 #include <nova/graphics/mesh.h>
+#include <nova/graphics/material.h>
+
+#include <nova/graphics/renderer/render_command.h>
 
 #include <nova/graphics/buffers/vertex_buffer_layout.h>
 
@@ -104,16 +104,11 @@ void Application::run()
 
   graphics::Mesh mesh(mesh_data);
 
-  auto shader = graphics::Shader::create(
-      m_context->api(),
+  auto material = graphics::Material::create(
       graphics::ShaderSource(core::FileHandler::read_file("resources/basic_vertex.glsl"),
                              core::FileHandler::read_file("resources/basic_fragment.glsl")));
 
-  if (!shader || !shader->valid())
-  {
-    core::logger()->error("Failed to create shader");
-    return;
-  }
+  material->set_uniform("u_Color", glm::vec3(0.2f, 0.3f, 0.8f));
 
   glm::mat4 model = glm::mat4(1.0f);
 
@@ -130,14 +125,13 @@ void Application::run()
     model = glm::rotate(model, glm::radians(15.0f * static_cast<float>(delta_time)),
                         glm::vec3(0.0f, 0.0f, 1.0f));
 
-    shader->bind();
+    material->bind();
     mesh.bind();
-    shader->set_uniform_mat4("u_Model", model);
-    shader->set_uniform_float3("u_Color", glm::vec3(0.2f, 0.3f, 0.8f));
+    material->set_uniform("u_Model", model);
     // ngr::RenderCommand::draw_arrays(ngr::PrimitiveType::TRIANGLES, 3);
     ngr::RenderCommand::draw_indexed(mesh.indices_count());
     mesh.unbind();
-    shader->unbind();
+    material->unbind();
 
     m_window->poll_events();
 
@@ -151,7 +145,7 @@ void Application::run()
   }
 }
 
-Application* Application::app()
+Application* Application::instance()
 {
   if (s_instance == nullptr)
   {

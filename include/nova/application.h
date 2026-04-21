@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "nova/graphics/graphics_api.h"
 
 #include <nova/core/logger.h>
 #include <nova/core/window.h>
@@ -33,7 +34,8 @@ public:
   const std::shared_ptr<graphics::GraphicsContext>& context() const { return m_context; }
 
 public:
-  static Application* app();
+  static Application* instance();
+  static graphics::GraphicsAPI graphics_api() { return instance()->context()->api(); }
 
 private:
   ApplicationSpecification m_spec;

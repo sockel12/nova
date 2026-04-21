@@ -33,7 +33,11 @@ std::shared_ptr<Shader> Shader::create(GraphicsAPI api, const ShaderSource& sour
   switch (api)
   {
     case GraphicsAPI::OPENGL:
-      return std::make_shared<opengl::GLShader>(source);
+    {
+      auto shader = std::make_shared<opengl::GLShader>();
+      shader->load(source);
+      return shader;
+    }
     default:
       core::logger()->error("Unsupported graphics API");
       return nullptr;
