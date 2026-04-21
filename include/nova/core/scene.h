@@ -16,10 +16,11 @@ class Scene
 public:
   Scene();
 
+  EntityManager& entity_manager() { return *m_entity_manager; }
+  const EntityManager& entity_manager() const { return *m_entity_manager; }
+
   Entity add_entity(const std::string& name);
-
   Entity get_entity(const std::string& name);
-
   void remove_entity(const Entity& entity);
 
   template <typename System>

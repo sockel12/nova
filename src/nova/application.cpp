@@ -9,6 +9,10 @@
 
 #include <nova/graphics/renderer/renderer.h>
 
+#include <nova/editor/editor_gui.h>
+#include <nova/editor/windows/hierarchy_window.h>
+#include <nova/editor/windows/inspector_window.h>
+
 namespace nova
 {
 
@@ -53,6 +57,10 @@ bool Application::init()
 
   graphics::renderer::Renderer::init(graphics_api());
 
+  editor::EditorGUI::init();
+  editor::EditorGUI::register_window<editor::windows::HierarchyWindow>("Hierarchy");
+  editor::EditorGUI::register_window<editor::windows::InspectorWindow>("Inspector");
+
   try
   {
     m_game = create_game();
@@ -77,6 +85,8 @@ void Application::shutdown()
     /** Reset the game pointer */
     m_game.reset();
   }
+
+  editor::EditorGUI::shutdown();
 
   io::ResourceManager::shutdown();
 
@@ -105,6 +115,9 @@ void Application::run()
 
   while (!glfwWindowShouldClose(m_window->native_window()))
   {
+    /** Poll events */
+    m_window->poll_events();
+
     /** Update the game */
     game().on_update(delta_time);
 
@@ -115,8 +128,8 @@ void Application::run()
 
     game().current_scene()->draw();
 
-    /** Poll events */
-    m_window->poll_events();
+    /** Render editor GUI */
+    editor::EditorGUI::render(game().current_scene());
 
     /** Swap buffers */
     m_context->swap_buffers();

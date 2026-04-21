@@ -18,16 +18,19 @@ public:
   Entity create_entity(const std::string& name);
   void remove_entity(const Entity& entity);
 
+  entt::registry& registry() { return m_registry; }
+  const entt::registry& registry() const { return m_registry; }
+
   template <typename T, typename... Args>
   T& add_component(const entt::entity& entity, Args&&... args)
   {
     return m_registry.emplace<T>(entity, std::forward<Args>(args)...);
   }
 
-  template <typename T>
-  T& get_component(const entt::entity& entity)
+  template <typename... Components>
+  auto& get(entt::entity entity)
   {
-    return m_registry.get<T>(entity);
+    return m_registry.get<Components...>(entity);
   }
 
   template <typename... Components>

@@ -53,6 +53,36 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glfw)
 
+# Dear ImGui dependency
+FetchContent_Declare(
+  imgui
+  GIT_REPOSITORY https://github.com/ocornut/imgui.git
+  GIT_TAG v1.92.1
+)
+FetchContent_MakeAvailable(imgui)
+
+add_library(imgui STATIC
+  ${imgui_SOURCE_DIR}/imgui.cpp
+  ${imgui_SOURCE_DIR}/imgui_draw.cpp
+  ${imgui_SOURCE_DIR}/imgui_tables.cpp
+  ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+  ${imgui_SOURCE_DIR}/imgui_demo.cpp
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+target_include_directories(imgui
+  PUBLIC
+  ${imgui_SOURCE_DIR}
+  ${imgui_SOURCE_DIR}/backends
+)
+
+target_compile_definitions(imgui PUBLIC
+  IMGUI_IMPL_OPENGL_LOADER_GLAD2
+)
+
+target_link_libraries(imgui PUBLIC glfw)
+
 add_subdirectory(deps/glad)
 
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
@@ -78,6 +108,7 @@ target_link_libraries(nova
   glfw
   glad
   glm
+  imgui
 )
 
 add_subdirectory(test_app)

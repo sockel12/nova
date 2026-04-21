@@ -20,9 +20,12 @@ Ref<nova::Game> create_game()
 
   scene->add_system(std::make_shared<TestSystem>());
 
+  scene->add_entity("Test Entity [1]");
+  scene->add_entity("Test Entity [2]");
+
   auto test_entity = scene->add_entity("Test Entity");
   auto& rc = test_entity.add_component<nova::core::components::RenderComponent>();
-  auto& transform = test_entity.get_component<nova::core::components::TransformComponent>();
+  auto transform = test_entity.get_component<nova::core::components::TransformComponent>();
 
   transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
 

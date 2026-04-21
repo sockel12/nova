@@ -16,7 +16,10 @@ public:
   T& add_component(Args&&... args);
 
   template <typename T>
-  T& get_component();
+  T& get_component()
+  {
+    return m_entity_manager->get<T>(m_handle);
+  }
 
   template <typename... Components>
   auto get_components()
@@ -40,12 +43,6 @@ template <typename T, typename... Args>
 T& Entity::add_component(Args&&... args)
 {
   return m_entity_manager->add_component<T>(m_handle, std::forward<Args>(args)...);
-}
-
-template <typename T>
-T& Entity::get_component()
-{
-  return m_entity_manager->get_component<T>(m_handle);
 }
 
 template <typename T>
