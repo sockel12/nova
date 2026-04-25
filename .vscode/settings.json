@@ -1,4 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "cmake.modifyLists.addNewSourceFiles": "no"
+  "cmake.modifyLists.addNewSourceFiles": "no",
+  "cmake.generator": "Ninja"
 }

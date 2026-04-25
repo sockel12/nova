@@ -36,6 +36,7 @@ public:
   void set_uniform(const std::string& name, const glm::vec4& value) override;
   void set_uniform(const std::string& name, const glm::mat3& value) override;
   void set_uniform(const std::string& name, const glm::mat4& value) override;
+  void set_uniform(const std::string& name, const Ref<Texture>& texture) override;
 
   void bind() const override;
   void unbind() const override;

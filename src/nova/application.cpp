@@ -12,6 +12,7 @@
 #include <nova/editor/editor_gui.h>
 #include <nova/editor/windows/hierarchy_window.h>
 #include <nova/editor/windows/inspector_window.h>
+#include <nova/editor/windows/graphics_window.h>
 
 namespace nova
 {
@@ -60,6 +61,7 @@ bool Application::init()
   editor::EditorGUI::init();
   editor::EditorGUI::register_window<editor::windows::HierarchyWindow>("Hierarchy");
   editor::EditorGUI::register_window<editor::windows::InspectorWindow>("Inspector");
+  editor::EditorGUI::register_window<editor::windows::GraphicsWindow>("Graphics");
 
   try
   {
@@ -77,6 +79,11 @@ bool Application::init()
 
 void Application::shutdown()
 {
+  if (m_shutdown)
+    return;
+
+  m_shutdown = true;
+
   if (m_game)
   {
     /** Tell the game to shut down */
@@ -95,14 +102,17 @@ void Application::shutdown()
   if (m_context)
   {
     m_context->shutdown();
+    m_context.reset();
   }
 
   if (m_window)
   {
     m_window->shutdown();
+    m_window.reset();
   }
 
   glfwTerminate();
+  s_instance = nullptr;
 }
 
 void Application::run()

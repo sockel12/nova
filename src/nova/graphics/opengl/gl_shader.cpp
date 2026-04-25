@@ -44,6 +44,14 @@ bool GLShader::load(const ShaderSource& source)
     return false;
   }
 
+  /** Only in non debug builds the shaders are detached and deleted */
+  // GL_CALL(glDetachShader(m_program_id, m_vertex_shader_id));
+  // GL_CALL(glDetachShader(m_program_id, m_fragment_shader_id));
+  // GL_CALL(glDeleteShader(m_vertex_shader_id));
+  // GL_CALL(glDeleteShader(m_fragment_shader_id));
+  // m_vertex_shader_id = 0;
+  // m_fragment_shader_id = 0;
+
   return true;
 }
 
@@ -115,6 +123,15 @@ void GLShader::set_uniform(const std::string& name, const glm::mat4& value)
   GLint location = get_uniform_location(name);
   if (location != -1)
     GL_CALL(glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]));
+}
+
+void GLShader::set_uniform(const std::string& name, const Ref<Texture>& texture)
+{
+  if (!texture)
+    return;
+
+  // Sampler uniforms expect the texture unit index, not the OpenGL texture object id.
+  set_uniform(name, 0);
 }
 
 void GLShader::bind() const { GL_CALL(glUseProgram(m_program_id)); }

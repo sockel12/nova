@@ -16,7 +16,7 @@ GLIndexBuffer::~GLIndexBuffer() { GL_CALL(glDeleteBuffers(1, &m_buffer_id)); }
 void GLIndexBuffer::data(const uint32_t* data, size_t count)
 {
   GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer_id));
-  GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(size_t), data, GL_STATIC_DRAW));
+  GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), data, GL_STATIC_DRAW));
   m_count = count;
 }
 

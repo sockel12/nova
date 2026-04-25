@@ -17,6 +17,11 @@ Window::~Window() { shutdown(); }
 bool Window::init()
 {
   m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
+  if (!m_window)
+  {
+    core::logger()->error("Failed to create GLFW window");
+    return false;
+  }
 
   auto size_callback = [](GLFWwindow* window, int width, int height)
   { core::logger()->info("Window resize: ({}/{})", width, height); };
@@ -36,6 +41,7 @@ void Window::shutdown()
   if (m_window)
   {
     glfwDestroyWindow(m_window);
+    m_window = nullptr;
   }
 }
 

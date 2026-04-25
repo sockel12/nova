@@ -27,6 +27,9 @@ void EditorGUI::init()
 
 void EditorGUI::shutdown()
 {
+  s_context.reset();
+  s_windows.clear();
+
   ImGui_ImplGlfw_Shutdown();
   ImGui_ImplOpenGL3_Shutdown();
   ImGui::DestroyContext();

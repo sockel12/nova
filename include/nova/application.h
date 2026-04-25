@@ -53,6 +53,7 @@ private:
   Ref<core::Window> m_window;
   Ref<graphics::GraphicsContext> m_context;
   Ref<Game> m_game;
+  bool m_shutdown = false;
 
 private:
   static Application* s_instance;

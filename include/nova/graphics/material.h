@@ -26,6 +26,9 @@ public:
   static Ref<Material> create();
 
 private:
+  void __set_uniform(const std::string& name, const UniformValue& value) const;
+
+private:
   Ref<Shader> m_shader;
   std::unordered_map<std::string, UniformValue> m_uniforms;
 };

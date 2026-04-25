@@ -84,6 +84,7 @@ target_compile_definitions(imgui PUBLIC
 target_link_libraries(imgui PUBLIC glfw)
 
 add_subdirectory(deps/glad)
+add_subdirectory(deps/stb)
 
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
 
@@ -109,6 +110,7 @@ target_link_libraries(nova
   glad
   glm
   imgui
+  stb
 )
 
 add_subdirectory(test_app)

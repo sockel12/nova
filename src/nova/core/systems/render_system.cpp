@@ -15,6 +15,11 @@ void RenderSystem::on_draw(EntityManager& entity_manager)
   view.each(
       [&](const auto& rc, const auto& transform)
       {
+        if (!rc.material || !rc.mesh || !rc.material->shader())
+        {
+          return;
+        }
+
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, transform.position);
         model = glm::rotate(model, glm::radians(transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));

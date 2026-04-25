@@ -4,6 +4,7 @@
 
 #include <nova/core/resource.h>
 
+#include <nova/graphics/texture.h>
 #include <nova/graphics/graphics_api.h>
 
 namespace nova::graphics
@@ -16,7 +17,7 @@ struct ShaderSource
 };
 
 using UniformValue = std::variant<int, glm::ivec2, glm::ivec3, glm::ivec4, float, glm::vec2,
-                                  glm::vec3, glm::vec4, glm::mat3, glm::mat4>;
+                                  glm::vec3, glm::vec4, glm::mat3, glm::mat4, Ref<Texture>>;
 
 class Shader : public core::Resource
 {
@@ -42,6 +43,7 @@ public:
   virtual void set_uniform(const std::string& name, const glm::vec4& value) = 0;
   virtual void set_uniform(const std::string& name, const glm::mat3& value) = 0;
   virtual void set_uniform(const std::string& name, const glm::mat4& value) = 0;
+  virtual void set_uniform(const std::string& name, const Ref<Texture>& texture) = 0;
 
   virtual void bind() const = 0;
   virtual void unbind() const = 0;
