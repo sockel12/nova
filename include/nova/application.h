@@ -12,11 +12,13 @@
 #include <nova/graphics/graphics_api.h>
 #include <nova/graphics/graphics_context.h>
 
+#include <nova/graphics/renderer/render_pass.h>
+
 /** This function must be overriden by the game enable custom application specification
  * (e.g. window size, title, etc.). This will be called *BEFORE* the application and graphics
  * context have been initialized, so the game should *not* attempt to access the application in this
  * function. */
-extern nova::ApplicationSpecification create_application_specification();
+extern nova::ApplicationSpecification create_application_specification(int argc, char** argv);
 
 /** This function must be overriden by the game to actually create the game instance. This
  * will be called *AFTER* the application and graphics context have been initialized, so
@@ -52,6 +54,7 @@ private:
   ApplicationSpecification m_spec;
   Ref<core::Window> m_window;
   Ref<graphics::GraphicsContext> m_context;
+  Ref<graphics::renderer::RenderPass> m_render_pass;
   Ref<Game> m_game;
   bool m_shutdown = false;
 

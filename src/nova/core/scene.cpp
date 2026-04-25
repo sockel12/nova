@@ -38,7 +38,7 @@ void Scene::update(double delta_time)
   }
 }
 
-void Scene::draw()
+void Scene::draw() const
 {
   for (auto& system : m_systems)
   {

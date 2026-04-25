@@ -16,6 +16,8 @@ public:
   static void init();
   static void shutdown();
 
+  static const Ref<EditorGUIContext>& context() { return s_context; }
+
   static void render(const Ref<core::Scene>& current_scene);
 
   template <typename T, typename... Args>
@@ -35,11 +37,13 @@ public:
 
 private:
   static void begin();
+  static void menu_bar();
   static void end();
 
 private:
   static Ref<EditorGUIContext> s_context;
   static std::vector<Ref<EditorGUIWindow>> s_windows;
+  static bool s_demo_window_visible;
 };
 
 }  // namespace nova::editor

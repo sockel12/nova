@@ -27,6 +27,8 @@ public:
 
 private:
   void __set_uniform(const std::string& name, const UniformValue& value) const;
+  void __set_uniform(const std::string& name, const UniformValue& value,
+                     uint32_t& texture_slot) const;
 
 private:
   Ref<Shader> m_shader;

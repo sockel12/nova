@@ -13,6 +13,7 @@
 #include <nova/editor/windows/hierarchy_window.h>
 #include <nova/editor/windows/inspector_window.h>
 #include <nova/editor/windows/graphics_window.h>
+#include <nova/editor/windows/scene_window.h>
 
 namespace nova
 {
@@ -57,11 +58,19 @@ bool Application::init()
   }
 
   graphics::renderer::Renderer::init(graphics_api());
+  m_render_pass = std::make_shared<graphics::renderer::RenderPass>();
+
+  if (!m_render_pass->init(m_spec.width, m_spec.height))
+  {
+    core::logger()->error("Failed to initialize render pass");
+    return false;
+  }
 
   editor::EditorGUI::init();
   editor::EditorGUI::register_window<editor::windows::HierarchyWindow>("Hierarchy");
   editor::EditorGUI::register_window<editor::windows::InspectorWindow>("Inspector");
   editor::EditorGUI::register_window<editor::windows::GraphicsWindow>("Graphics");
+  editor::EditorGUI::register_window<editor::windows::SceneWindow>("Scene");
 
   try
   {
@@ -136,7 +145,12 @@ void Application::run()
     /** Start drawing */
     graphics::renderer::Renderer::clear();
 
-    game().current_scene()->draw();
+    /** Render the active scene */
+    m_render_pass->begin();
+    m_render_pass->render(*game().current_scene());
+    m_render_pass->end();
+
+    editor::EditorGUI::context()->frame_buffer = m_render_pass->frame_buffer();
 
     /** Render editor GUI */
     editor::EditorGUI::render(game().current_scene());

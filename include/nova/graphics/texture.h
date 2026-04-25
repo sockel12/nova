@@ -25,6 +25,8 @@ public:
 
   virtual uint32_t texture_id() const = 0;
 
+  const TextureData& data() const { return m_data; }
+
   virtual void bind(uint32_t slot = 0) const = 0;
   virtual void unbind() const = 0;
 

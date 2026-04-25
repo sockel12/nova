@@ -11,13 +11,15 @@ namespace nova::editor
 
 Ref<EditorGUIContext> EditorGUI::s_context = std::make_shared<EditorGUIContext>();
 std::vector<Ref<EditorGUIWindow>> EditorGUI::s_windows = {};
+bool EditorGUI::s_demo_window_visible = true;
 
 void EditorGUI::init()
 {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO();
-  (void) io;
+
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
   ImGui::StyleColorsDark();
 
@@ -41,11 +43,13 @@ void EditorGUI::render(const Ref<core::Scene>& current_scene)
 
   begin();
 
-  ImGui::ShowDemoWindow();
+  if (s_demo_window_visible)
+    ImGui::ShowDemoWindow();
 
   for (const auto& window : s_windows)
   {
-    window->render(*s_context);
+    if (window->visible())
+      window->render(*s_context);
   }
 
   end();
@@ -56,6 +60,41 @@ void EditorGUI::begin()
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
+
+  ImGui::DockSpaceOverViewport();
+
+  menu_bar();
+}
+
+void EditorGUI::menu_bar()
+{
+  if (ImGui::BeginMainMenuBar())
+  {
+    if (ImGui::BeginMenu("File"))
+    {
+      ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Windows"))
+    {
+      for (const auto& window : s_windows)
+      {
+        if (ImGui::MenuItem(window->name().c_str()))
+        {
+          window->visible(!window->visible());
+        }
+      }
+
+      if (ImGui::MenuItem("Demo Window"))
+      {
+        s_demo_window_visible = !s_demo_window_visible;
+      }
+
+      ImGui::EndMenu();
+    }
+
+    ImGui::EndMainMenuBar();
+  }
 }
 
 void EditorGUI::end()

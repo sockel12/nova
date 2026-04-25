@@ -11,6 +11,11 @@ public:
   EditorGUIWindow(const std::string& name);
   virtual ~EditorGUIWindow() = default;
 
+  const std::string& name() const { return m_name; }
+
+  void visible(bool visible) { m_visible = visible; }
+  bool visible() const { return m_visible; }
+
   void begin();
   void render(EditorGUIContext& context);
   void end();
@@ -20,6 +25,7 @@ protected:
 
 protected:
   std::string m_name;
+  bool m_visible = true;
 };
 
 }  // namespace nova::editor

@@ -2,9 +2,9 @@
 
 #include <nova/core/logger.h>
 
-int main()
+int main(int argc, char** argv)
 {
-  nova::ApplicationSpecification spec = create_application_specification();
+  nova::ApplicationSpecification spec = create_application_specification(argc, argv);
 
   auto app = std::make_shared<nova::Application>(spec);
 

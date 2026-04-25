@@ -5,7 +5,7 @@
 
 #include <nova/io/resource_manager.h>
 
-nova::ApplicationSpecification create_application_specification()
+nova::ApplicationSpecification create_application_specification(int argc, char** argv)
 {
   nova::ApplicationSpecification spec;
   spec.name = "Nova Test Application";
