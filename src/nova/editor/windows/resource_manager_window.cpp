@@ -56,6 +56,8 @@ void ResourceManagerWindow::on_imgui_render(EditorGUIContext& context)
               [](const auto& lhs, const auto& rhs) { return lhs < rhs; });
   }
 
+  bool tree_node_expanded = false;
+
   for (std::size_t type_index = 0; type_index < resources_by_type.size(); ++type_index)
   {
     auto& resources = resources_by_type[type_index];
@@ -69,6 +71,7 @@ void ResourceManagerWindow::on_imgui_render(EditorGUIContext& context)
 
     if (ImGui::TreeNode(resource_type_label(type)))
     {
+      tree_node_expanded = true;
       for (const auto& name : resources)
       {
         bool selected = context.selected_resource == name;
@@ -88,6 +91,11 @@ void ResourceManagerWindow::on_imgui_render(EditorGUIContext& context)
 
       ImGui::TreePop();
     }
+  }
+
+  if (!tree_node_expanded)
+  {
+    context.selected_resource = "";
   }
 }
 
