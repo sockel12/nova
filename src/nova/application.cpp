@@ -10,10 +10,6 @@
 #include <nova/graphics/renderer/renderer.h>
 
 #include <nova/editor/editor_gui.h>
-#include <nova/editor/windows/hierarchy_window.h>
-#include <nova/editor/windows/inspector_window.h>
-#include <nova/editor/windows/graphics_window.h>
-#include <nova/editor/windows/scene_window.h>
 
 namespace nova
 {
@@ -67,10 +63,6 @@ bool Application::init()
   }
 
   editor::EditorGUI::init();
-  editor::EditorGUI::register_window<editor::windows::HierarchyWindow>("Hierarchy");
-  editor::EditorGUI::register_window<editor::windows::InspectorWindow>("Inspector");
-  editor::EditorGUI::register_window<editor::windows::GraphicsWindow>("Graphics");
-  editor::EditorGUI::register_window<editor::windows::SceneWindow>("Scene");
 
   try
   {
@@ -146,7 +138,7 @@ void Application::run()
     graphics::renderer::Renderer::clear();
 
     /** Render the active scene */
-    m_render_pass->begin();
+    m_render_pass->begin(*game().current_scene());
     m_render_pass->render(*game().current_scene());
     m_render_pass->end();
 

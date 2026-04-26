@@ -20,7 +20,7 @@ Ref<Image> Image::load(const std::string& path)
 {
   Ref<Image> image = std::make_shared<Image>();
 
-  stbi_set_flip_vertically_on_load(1);
+  // stbi_set_flip_vertically_on_load(1);
   image->m_data.data = stbi_load(path.c_str(), &image->m_data.width, &image->m_data.height,
                                  &image->m_data.channels, 0);
 

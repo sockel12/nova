@@ -6,16 +6,15 @@
 namespace nova::editor::windows
 {
 
-class SceneWindow : public EditorGUIWindow
+class ResourceManagerWindow : public EditorGUIWindow
 {
 public:
-  SceneWindow(const std::string& name = "Scene");
+  ResourceManagerWindow(const std::string& name = "Resource Manager");
 
   void on_imgui_render(EditorGUIContext& context) override;
 
 private:
   entt::entity m_selected_entity = entt::null;
-  bool m_keep_aspect_ratio = true;
 };
 
 }  // namespace nova::editor::windows

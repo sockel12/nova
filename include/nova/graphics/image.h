@@ -15,7 +15,7 @@ struct ImageData
   unsigned char* data;
 };
 
-class Image : public core::Resource
+class Image
 {
 public:
   Image() = default;

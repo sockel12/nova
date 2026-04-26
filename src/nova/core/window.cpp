@@ -19,7 +19,9 @@ bool Window::init()
   m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
   if (!m_window)
   {
-    core::logger()->error("Failed to create GLFW window");
+    const char* description;
+    glfwGetError(&description);
+    core::logger()->error("Failed to create GLFW window: {}", description);
     return false;
   }
 

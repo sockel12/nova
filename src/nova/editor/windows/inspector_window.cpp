@@ -1,9 +1,9 @@
 #include <nova/editor/windows/inspector_window.h>
 
-#include <nova/core/components/tag_component.h>
-
 #include <imgui.h>
-#include "nova/core/components/transform_component.h"
+
+#include <nova/core/components/tag_component.h>
+#include <nova/core/components/transform_component.h>
 
 namespace nova::editor::windows
 {
@@ -25,9 +25,12 @@ void InspectorWindow::on_imgui_render(EditorGUIContext& context)
 
   ImGui::Text("Tag: %s", tag_component.tag.c_str());
   ImGui::Separator();
-  ImGui::InputFloat3("Position", &transform_component.position.x);
-  ImGui::InputFloat3("Rotation", &transform_component.rotation.x);
-  ImGui::InputFloat3("Scale", &transform_component.scale.x);
+  ImGui::DragFloat3("Position", &transform_component.position.x, 0.1f, 0.0f, 0.0f, "%.3f",
+                    ImGuiSliderFlags_NoRoundToFormat);
+  ImGui::DragFloat3("Rotation", &transform_component.rotation.x, 0.1f, 0.0f, 0.0f, "%.3f",
+                    ImGuiSliderFlags_NoRoundToFormat);
+  ImGui::DragFloat3("Scale", &transform_component.scale.x, 0.1f, 0.0f, 0.0f, "%.3f",
+                    ImGuiSliderFlags_NoRoundToFormat);
 
   ImGui::Separator();
 }

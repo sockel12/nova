@@ -5,9 +5,19 @@
 namespace nova::editor
 {
 
-EditorGUIWindow::EditorGUIWindow(const std::string& name) : m_name(name) {}
+EditorGUIWindow::EditorGUIWindow(const std::string& name, bool menu_bar)
+    : m_name(name), m_menu_bar(menu_bar)
+{
+}
 
-void EditorGUIWindow::begin() { ImGui::Begin(m_name.c_str()); }
+void EditorGUIWindow::begin()
+{
+  ImGuiWindowFlags flags = 0;
+  if (m_menu_bar)
+    flags |= ImGuiWindowFlags_MenuBar;
+
+  ImGui::Begin(m_name.c_str(), nullptr, flags);
+}
 
 void EditorGUIWindow::render(EditorGUIContext& context)
 {

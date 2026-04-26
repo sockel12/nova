@@ -18,6 +18,9 @@ public:
 
   static bool exists(const std::string& name);
 
+  static auto begin() { return instance().m_resources.begin(); }
+  static auto end() { return instance().m_resources.end(); }
+
   /** CREATE */
 
   static Ref<graphics::Material> create_material(const std::string& name);
@@ -35,8 +38,6 @@ public:
                                            const graphics::ShaderSource& source);
   static Ref<graphics::Shader> load_shader(const std::string& name,
                                            graphics::ShaderSource&& source);
-
-  static Ref<graphics::Image> load_image(const std::string& name, const std::string& path);
 
   static Ref<graphics::Texture> load_texture(const std::string& name, const std::string& path);
 
@@ -61,8 +62,6 @@ private:
   Ref<graphics::Shader> __load_shader(const std::string& name,
                                       const graphics::ShaderSource& source);
   Ref<graphics::Shader> __load_shader(const std::string& name, graphics::ShaderSource&& source);
-
-  Ref<graphics::Image> __load_image(const std::string& name, const std::string& path);
 
   Ref<graphics::Texture> __load_texture(const std::string& name, const std::string& path);
 

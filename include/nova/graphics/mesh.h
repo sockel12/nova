@@ -24,6 +24,8 @@ public:
   Mesh();
   Mesh(const MeshData& mesh_data);
 
+  core::ResourceType type() const override { return core::ResourceType::MESH; }
+
   void update();
 
   void bind() const;

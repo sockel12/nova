@@ -14,6 +14,8 @@ class Material : public core::Resource
 public:
   Material() = default;
 
+  core::ResourceType type() const override { return core::ResourceType::MATERIAL; }
+
   void shader(const Ref<Shader>& shader) { m_shader = shader; }
   const Ref<Shader>& shader() const { return m_shader; }
 

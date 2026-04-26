@@ -13,6 +13,7 @@ struct EditorGUIContext
 {
   Ref<core::Scene> active_scene;
   Ref<graphics::buffers::FrameBuffer> frame_buffer;
+  std::string selected_resource = "";
   entt::entity selected_entity = entt::null;
 };
 

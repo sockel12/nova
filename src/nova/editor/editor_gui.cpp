@@ -6,6 +6,14 @@
 
 #include <nova/application.h>
 
+#include <nova/editor/windows/hierarchy_window.h>
+#include <nova/editor/windows/inspector_window.h>
+#include <nova/editor/windows/graphics_window.h>
+#include <nova/editor/windows/scene_window.h>
+#include <nova/editor/windows/scene_settings_window.h>
+#include <nova/editor/windows/resource_manager_window.h>
+#include <nova/editor/windows/resource_viewer_window.h>
+
 namespace nova::editor
 {
 
@@ -25,6 +33,14 @@ void EditorGUI::init()
 
   ImGui_ImplGlfw_InitForOpenGL(Application::instance()->window()->native_window(), true);
   ImGui_ImplOpenGL3_Init("#version 330");
+
+  register_window<editor::windows::HierarchyWindow>("Hierarchy");
+  register_window<editor::windows::InspectorWindow>("Inspector");
+  register_window<editor::windows::GraphicsWindow>("Graphics");
+  register_window<editor::windows::SceneWindow>("Scene");
+  register_window<editor::windows::SceneSettingsWindow>("Scene Settings");
+  register_window<editor::windows::ResourceManagerWindow>("Resource Manager");
+  register_window<editor::windows::ResourceViewerWindow>("Resource Viewer");
 }
 
 void EditorGUI::shutdown()

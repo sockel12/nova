@@ -18,7 +18,7 @@ public:
 
   bool init(uint32_t width, uint32_t height);
 
-  void begin();
+  void begin(const core::Scene& scene);
   void render(const core::Scene& scene);
   void end();
 

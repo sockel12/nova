@@ -4,6 +4,8 @@
 
 #include <nova/core/logger.h>
 
+#include <nova/graphics/image.h>
+
 #include <nova/io/resource_manager.h>
 
 namespace nova::io
@@ -51,11 +53,6 @@ Ref<graphics::Shader> ResourceManager::load_shader(const std::string& name,
   return instance().__load_shader(name, std::move(source));
 }
 
-Ref<graphics::Image> ResourceManager::load_image(const std::string& name, const std::string& path)
-{
-  return instance().__load_image(name, path);
-}
-
 Ref<graphics::Texture> ResourceManager::load_texture(const std::string& name,
                                                      const std::string& path)
 {
@@ -84,6 +81,8 @@ Ref<graphics::Material> ResourceManager::__create_material(const std::string& na
   }
 
   auto material = graphics::Material::create();
+  material->m_name = name;
+
   auto res = m_resources.emplace(name, material);
 
   if (res.second)
@@ -102,6 +101,7 @@ Ref<graphics::Mesh> ResourceManager::__create_mesh(const std::string& name)
   }
 
   auto mesh = graphics::Mesh::create();
+  mesh->m_name = name;
   auto res = m_resources.emplace(name, mesh);
 
   if (res.second)
@@ -120,6 +120,7 @@ Ref<graphics::Mesh> ResourceManager::__create_mesh(const std::string& name, Mesh
   }
 
   auto mesh = graphics::Mesh::create(primitive);
+  mesh->m_name = name;
   auto res = m_resources.emplace(name, mesh);
 
   if (res.second)
@@ -139,6 +140,7 @@ Ref<core::Resource> ResourceManager::__create_texture(const std::string& name, u
   }
 
   auto texture = graphics::Texture::create(width, height, channels);
+  texture->m_name = name;
   auto res = m_resources.emplace(name, texture);
 
   if (res.second)
@@ -167,7 +169,7 @@ Ref<graphics::Shader> ResourceManager::__load_shader(const std::string& name,
   }
 
   auto shader = graphics::Shader::create(source);
-
+  shader->m_name = name;
   auto res = m_resources.emplace(name, shader);
 
   if (res.second)
@@ -187,37 +189,12 @@ Ref<graphics::Shader> ResourceManager::__load_shader(const std::string& name,
   }
 
   auto shader = graphics::Shader::create(std::move(source));
-
+  shader->m_name = name;
   auto res = m_resources.emplace(name, shader);
 
   if (res.second)
   {
     return shader;
-  }
-
-  return nullptr;
-}
-
-Ref<graphics::Image> ResourceManager::__load_image(const std::string& name, const std::string& path)
-{
-  if (__exists(name))
-  {
-    return std::dynamic_pointer_cast<graphics::Image>(__load_resource(name));
-  }
-
-  auto image = graphics::Image::load(path);
-
-  if (!image)
-  {
-    core::logger()->error("Failed to load image '{}' with path '{}'", name, path);
-    return nullptr;
-  }
-
-  auto res = m_resources.emplace(name, image);
-
-  if (res.second)
-  {
-    return image;
   }
 
   return nullptr;
@@ -231,7 +208,7 @@ Ref<graphics::Texture> ResourceManager::__load_texture(const std::string& name,
     return std::dynamic_pointer_cast<graphics::Texture>(__load_resource(name));
   }
 
-  auto image = __load_image(name + "_image", path);
+  auto image = graphics::Image::load(path);
   if (!image)
   {
     core::logger()->error("Failed to load image for texture '{}'", name);
@@ -245,6 +222,7 @@ Ref<graphics::Texture> ResourceManager::__load_texture(const std::string& name,
     core::logger()->error("Failed to create texture for '{}'", name);
     return nullptr;
   }
+  texture->m_name = name;
 
   auto res = m_resources.emplace(name, texture);
 

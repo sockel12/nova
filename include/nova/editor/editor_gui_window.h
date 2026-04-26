@@ -8,7 +8,7 @@ namespace nova::editor
 class EditorGUIWindow
 {
 public:
-  EditorGUIWindow(const std::string& name);
+  EditorGUIWindow(const std::string& name, bool menu_bar = false);
   virtual ~EditorGUIWindow() = default;
 
   const std::string& name() const { return m_name; }
@@ -26,6 +26,7 @@ protected:
 protected:
   std::string m_name;
   bool m_visible = true;
+  bool m_menu_bar = false;
 };
 
 }  // namespace nova::editor

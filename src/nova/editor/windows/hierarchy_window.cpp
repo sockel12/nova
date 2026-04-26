@@ -10,18 +10,27 @@ HierarchyWindow::HierarchyWindow(const std::string& name) : EditorGUIWindow(name
 
 void HierarchyWindow::on_imgui_render(EditorGUIContext& context)
 {
-  auto view = context.active_scene->entity_manager().view<core::components::TagComponent>();
+  auto view =
+      context.active_scene->entity_manager().registry().view<core::components::TagComponent>();
 
-  view.each(
-      [&](entt::entity entity, const core::components::TagComponent& tag)
+  auto storage = view.storage<core::components::TagComponent>();
+
+  for (auto [entity, tag_component] : view->reach())
+  {
+    bool selected = (context.selected_entity == entity);
+
+    if (ImGui::Selectable(tag_component.tag.c_str(), selected))
+    {
+      if (selected)
       {
-        bool selected = (context.selected_entity == entity);
-
-        if (ImGui::Selectable(tag.tag.c_str(), selected))
-        {
-          context.selected_entity = entity;
-        }
-      });
+        context.selected_entity = entt::null;
+      }
+      else
+      {
+        context.selected_entity = entity;
+      }
+    }
+  }
 }
 
 }  // namespace nova::editor::windows

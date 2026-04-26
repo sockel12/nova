@@ -23,6 +23,7 @@ public:
   static void submit(const Ref<Mesh>& mesh, const Ref<Material>& material);
 
   static void clear();
+  static void set_clear_color(const glm::vec3& color) { set_clear_color(glm::vec4(color, 1.0f)); }
   static void set_clear_color(const glm::vec4& color);
   static void set_clear_color(float r, float g, float b, float a);
 

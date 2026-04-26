@@ -12,6 +12,7 @@ GraphicsWindow::GraphicsWindow(const std::string& name) : EditorGUIWindow(name) 
 void GraphicsWindow::on_imgui_render(EditorGUIContext& context)
 {
   auto view = context.active_scene->entity_manager()
+                  .registry()
                   .view<core::components::TagComponent, core::components::RenderComponent>();
 
   if (m_selected_entity != entt::null)
@@ -62,7 +63,14 @@ void GraphicsWindow::on_imgui_render(EditorGUIContext& context)
 
         if (ImGui::Selectable(tag.tag.c_str(), selected))
         {
-          m_selected_entity = entity;
+          if (selected)
+          {
+            m_selected_entity = entt::null;
+          }
+          else
+          {
+            m_selected_entity = entity;
+          }
         }
       });
 }

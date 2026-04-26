@@ -20,8 +20,14 @@ class Texture : public core::Resource
 {
 public:
   Texture(uint32_t width, uint32_t height, uint32_t channels);
-
   virtual ~Texture() = default;
+
+  core::ResourceType type() const override { return core::ResourceType::TEXTURE_2D; }
+
+  float get_aspect_ratio() const
+  {
+    return static_cast<float>(m_data.width) / static_cast<float>(m_data.height);
+  }
 
   virtual uint32_t texture_id() const = 0;
 

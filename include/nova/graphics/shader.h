@@ -24,6 +24,8 @@ class Shader : public core::Resource
 public:
   virtual ~Shader() = default;
 
+  core::ResourceType type() const override { return core::ResourceType::SHADER; }
+
   virtual bool valid() const = 0;
 
   virtual bool load(const ShaderSource& source);
