@@ -44,10 +44,9 @@ Ref<nova::Game> create_game()
   auto texture = nova::io::ResourceManager::load_texture("smiley", "resources/textures/smiley.png");
   auto mesh = nova::io::ResourceManager::create_mesh("quad", MeshPrimitive::QUAD);
   auto shader = nova::io::ResourceManager::load_shader(
-      "basic", nova::graphics::ShaderSource{.vertex_shader = nova::core::FileHandler::read_file(
-                                                "resources/shaders/basic_vertex.glsl"),
-                                            .fragment_shader = nova::core::FileHandler::read_file(
-                                                "resources/shaders/basic_fragment.glsl")});
+      "basic", nova::graphics::ShaderSource{
+                   nova::core::FileHandler::read_file("resources/shaders/basic_vertex.glsl"),
+                   nova::core::FileHandler::read_file("resources/shaders/basic_fragment.glsl")});
 
   auto material = nova::io::ResourceManager::create_material("test_material");
   auto material_2 = nova::io::ResourceManager::create_material("test_material_2");
