@@ -13,6 +13,7 @@
 #include <nova/editor/windows/scene_settings_window.h>
 #include <nova/editor/windows/resource_manager_window.h>
 #include <nova/editor/windows/resource_viewer_window.h>
+#include <nova/editor/windows/statistics_window.h>
 
 namespace nova::editor
 {
@@ -41,6 +42,7 @@ void EditorGUI::init()
   register_window<editor::windows::SceneSettingsWindow>("Scene Settings");
   register_window<editor::windows::ResourceManagerWindow>("Resource Manager");
   register_window<editor::windows::ResourceViewerWindow>("Resource Viewer");
+  register_window<editor::windows::StatisticsWindow>("Statistics");
 }
 
 void EditorGUI::shutdown()

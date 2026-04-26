@@ -134,13 +134,16 @@ void Application::run()
 
     game().current_scene()->update(delta_time);
 
-    /** Start drawing */
-    graphics::renderer::Renderer::clear();
+    /** Start per-frame renderer statistics before scene rendering. */
+    graphics::renderer::Renderer::begin_frame(delta_time);
 
-    /** Render the active scene */
+    /** Render the active scene through the render pass. */
     m_render_pass->begin(*game().current_scene());
     m_render_pass->render(*game().current_scene());
     m_render_pass->end();
+
+    /** End per-frame renderer statistics after scene rendering. */
+    graphics::renderer::Renderer::end_frame();
 
     editor::EditorGUI::context()->frame_buffer = m_render_pass->frame_buffer();
 
