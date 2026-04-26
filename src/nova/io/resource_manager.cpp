@@ -81,7 +81,7 @@ Ref<graphics::Material> ResourceManager::__create_material(const std::string& na
   }
 
   auto material = graphics::Material::create();
-  material->m_name = name;
+  material->set_name(name);
 
   auto res = m_resources.emplace(name, material);
 
@@ -101,7 +101,7 @@ Ref<graphics::Mesh> ResourceManager::__create_mesh(const std::string& name)
   }
 
   auto mesh = graphics::Mesh::create();
-  mesh->m_name = name;
+  mesh->set_name(name);
   auto res = m_resources.emplace(name, mesh);
 
   if (res.second)
@@ -120,7 +120,7 @@ Ref<graphics::Mesh> ResourceManager::__create_mesh(const std::string& name, Mesh
   }
 
   auto mesh = graphics::Mesh::create(primitive);
-  mesh->m_name = name;
+  mesh->set_name(name);
   auto res = m_resources.emplace(name, mesh);
 
   if (res.second)
@@ -140,7 +140,7 @@ Ref<core::Resource> ResourceManager::__create_texture(const std::string& name, u
   }
 
   auto texture = graphics::Texture::create(width, height, channels);
-  texture->m_name = name;
+  texture->set_name(name);
   auto res = m_resources.emplace(name, texture);
 
   if (res.second)
@@ -169,7 +169,7 @@ Ref<graphics::Shader> ResourceManager::__load_shader(const std::string& name,
   }
 
   auto shader = graphics::Shader::create(source);
-  shader->m_name = name;
+  shader->set_name(name);
   auto res = m_resources.emplace(name, shader);
 
   if (res.second)
@@ -189,7 +189,7 @@ Ref<graphics::Shader> ResourceManager::__load_shader(const std::string& name,
   }
 
   auto shader = graphics::Shader::create(std::move(source));
-  shader->m_name = name;
+  shader->set_name(name);
   auto res = m_resources.emplace(name, shader);
 
   if (res.second)
@@ -222,7 +222,7 @@ Ref<graphics::Texture> ResourceManager::__load_texture(const std::string& name,
     core::logger()->error("Failed to create texture for '{}'", name);
     return nullptr;
   }
-  texture->m_name = name;
+  texture->set_name(name);
 
   auto res = m_resources.emplace(name, texture);
 

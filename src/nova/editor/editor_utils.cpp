@@ -1,7 +1,5 @@
 #include <nova/editor/editor_utils.h>
 
-#include <format>
-
 #include <imgui.h>
 
 namespace nova::editor
@@ -9,6 +7,8 @@ namespace nova::editor
 
 void EditorUtils::display_resource(const Ref<core::Resource>& resource)
 {
+  ImGui::Text("Id: %llu", static_cast<unsigned long long>(resource->id()));
+
   switch (resource->type())
   {
     case core::ResourceType::TEXTURE_2D:
