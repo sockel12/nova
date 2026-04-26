@@ -11,6 +11,7 @@ nova::ApplicationSpecification create_application_specification(int argc, char**
   spec.name = "Nova Test Application";
   spec.width = 1600;
   spec.height = 900;
+  spec.target_fps = 60;
   return spec;
 }
 

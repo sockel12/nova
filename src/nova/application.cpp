@@ -11,6 +11,9 @@
 
 #include <nova/editor/editor_gui.h>
 
+#include <thread>
+#include <chrono>
+
 namespace nova
 {
 
@@ -121,11 +124,16 @@ void Application::run()
   bool should_close = false;
 
   double last_time = glfwGetTime();
-  double delta_time = 0.0;
+  double delta_time = m_spec.target_fps > 0 ? 1.0 / m_spec.target_fps : 0.0;
   size_t frame_count = 0;
+
+  // Calculate target frame time (in seconds)
+  double target_frame_time = 1.0 / m_spec.target_fps;
 
   while (!glfwWindowShouldClose(m_window->native_window()))
   {
+    double frame_start_time = glfwGetTime();
+
     /** Poll events */
     m_window->poll_events();
 
@@ -153,11 +161,24 @@ void Application::run()
     /** Swap buffers */
     m_context->swap_buffers();
 
-    /** Calculate delta time */
+    /** Calculate delta time and frame rate limiting */
     double current_time = glfwGetTime();
     frame_count++;
     delta_time = current_time - last_time;
     last_time = current_time;
+
+    // Frame rate limiting: sleep if frame finished too early
+    double frame_time = current_time - frame_start_time;
+    if (frame_time < target_frame_time)
+    {
+      double sleep_time = target_frame_time - frame_time - 0.00009;
+      std::this_thread::sleep_for(std::chrono::duration<double>(sleep_time));
+
+      // Update delta_time to reflect actual frame time
+      current_time = glfwGetTime();
+      delta_time = current_time - (last_time - delta_time);
+      last_time = current_time;
+    }
   }
 }
 
