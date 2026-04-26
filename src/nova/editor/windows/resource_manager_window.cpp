@@ -37,10 +37,8 @@ void ResourceManagerWindow::on_imgui_render(EditorGUIContext& context)
 {
   std::array<std::vector<std::string>, 5> resources_by_type;
 
-  for (auto it = io::ResourceManager::begin(); it != io::ResourceManager::end(); ++it)
+  for (const auto& [name, resource] : io::ResourceManager::resources())
   {
-    const auto& [name, resource] = *it;
-
     const auto type = resource ? resource->type() : core::ResourceType::UNKNOWN;
     const auto type_index = static_cast<std::size_t>(type);
 

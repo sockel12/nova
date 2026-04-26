@@ -15,6 +15,24 @@ void ResourceManager::shutdown() { instance().m_resources.clear(); }
 
 bool ResourceManager::exists(const std::string& name) { return instance().__exists(name); }
 
+std::vector<std::pair<std::string, Ref<core::Resource>>> ResourceManager::resources()
+{
+  std::vector<std::pair<std::string, Ref<core::Resource>>> resources;
+  resources.reserve(instance().m_resources.size());
+
+  for (const auto& [name, resource] : instance().m_resources)
+  {
+    resources.emplace_back(name, resource);
+  }
+
+  return resources;
+}
+
+Ref<core::Resource> ResourceManager::get_resource(const std::string& name)
+{
+  return instance().__get_resource(name);
+}
+
 Ref<graphics::Material> ResourceManager::create_material(const std::string& name)
 {
   return instance().__create_material(name);
@@ -35,12 +53,6 @@ Ref<core::Resource> ResourceManager::create_texture(const std::string& name, uin
 {
   return instance().__create_texture(name, width, height, channels);
 }
-
-Ref<core::Resource> ResourceManager::load_resource(const std::string& name)
-{
-  return instance().__load_resource(name);
-}
-
 Ref<graphics::Shader> ResourceManager::load_shader(const std::string& name,
                                                    const graphics::ShaderSource& source)
 {
@@ -150,7 +162,7 @@ Ref<core::Resource> ResourceManager::__create_texture(const std::string& name, u
   return nullptr;
 }
 
-Ref<core::Resource> ResourceManager::__load_resource(const std::string& name)
+Ref<core::Resource> ResourceManager::__get_resource(const std::string& name)
 {
   if (__exists(name))
   {
@@ -165,7 +177,7 @@ Ref<graphics::Shader> ResourceManager::__load_shader(const std::string& name,
 {
   if (__exists(name))
   {
-    return std::dynamic_pointer_cast<graphics::Shader>(__load_resource(name));
+    return std::dynamic_pointer_cast<graphics::Shader>(__get_resource(name));
   }
 
   auto shader = graphics::Shader::create(source);
@@ -185,7 +197,7 @@ Ref<graphics::Shader> ResourceManager::__load_shader(const std::string& name,
 {
   if (__exists(name))
   {
-    return std::dynamic_pointer_cast<graphics::Shader>(__load_resource(name));
+    return std::dynamic_pointer_cast<graphics::Shader>(__get_resource(name));
   }
 
   auto shader = graphics::Shader::create(std::move(source));
@@ -205,7 +217,7 @@ Ref<graphics::Texture> ResourceManager::__load_texture(const std::string& name,
 {
   if (__exists(name))
   {
-    return std::dynamic_pointer_cast<graphics::Texture>(__load_resource(name));
+    return std::dynamic_pointer_cast<graphics::Texture>(__get_resource(name));
   }
 
   auto image = graphics::Image::load(path);

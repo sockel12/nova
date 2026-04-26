@@ -18,7 +18,7 @@ void ResourceViewerWindow::on_imgui_render(EditorGUIContext& context)
     return;
   }
 
-  const auto& resource = io::ResourceManager::load_resource(context.selected_resource);
+  const auto& resource = io::ResourceManager::get_resource(context.selected_resource);
 
   if (!resource)
   {

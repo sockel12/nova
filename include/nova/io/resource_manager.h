@@ -8,6 +8,8 @@
 #include <nova/graphics/image.h>
 #include <nova/graphics/texture.h>
 
+#include <vector>
+
 namespace nova::io
 {
 
@@ -18,8 +20,9 @@ public:
 
   static bool exists(const std::string& name);
 
-  static auto begin() { return instance().m_resources.begin(); }
-  static auto end() { return instance().m_resources.end(); }
+  static std::vector<std::pair<std::string, Ref<core::Resource>>> resources();
+
+  static Ref<core::Resource> get_resource(const std::string& name);
 
   /** CREATE */
 
@@ -30,9 +33,6 @@ public:
 
   static Ref<core::Resource> create_texture(const std::string& name, uint32_t width,
                                             uint32_t height, uint32_t channels = 4);
-
-  /** LOAD */
-  static Ref<core::Resource> load_resource(const std::string& name);
 
   static Ref<graphics::Shader> load_shader(const std::string& name,
                                            const graphics::ShaderSource& source);
@@ -57,7 +57,7 @@ private:
                                        uint32_t channels = 4);
 
   /** LOAD */
-  Ref<core::Resource> __load_resource(const std::string& name);
+  Ref<core::Resource> __get_resource(const std::string& name);
 
   Ref<graphics::Shader> __load_shader(const std::string& name,
                                       const graphics::ShaderSource& source);
